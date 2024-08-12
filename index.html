@@ -229,6 +229,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/07/learnRust2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Byte的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2024/08/07/learnRust2/" itemprop="url">Rust入门-基础 第二节 Rust变量和可变性</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-08-07T22:54:03+08:00">
+                2024-08-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="可变变量和不可变变量-Mutable和Immutable"><a href="#可变变量和不可变变量-Mutable和Immutable" class="headerlink" title="可变变量和不可变变量(Mutable和Immutable)"></a>可变变量和不可变变量(Mutable和Immutable)</h1><p>Rust的变量默认是不可改变的(immutable),如果我们想改变变量的值,就需要声明可变变量(mutable)</p>
+<h2 id="声明不可变变量"><a href="#声明不可变变量" class="headerlink" title="声明不可变变量"></a>声明不可变变量</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let x=5;</span><br><span class="line">println!(&#x27;The value of x is:&#123;&#125;&quot;,x);</span><br></pre></td></tr></table></figure>
+<h2 id="声明可变变量"><a href="#声明可变变量" class="headerlink" title="声明可变变量"></a>声明可变变量</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let mut x=5;</span><br><span class="line">println!(&quot;The value of xis:&#123;&#125;&quot;,x);</span><br><span class="line">X = 6;</span><br><span class="line">printin!(&quot;The value of x is: &#123;&#125;&quot;,x);</span><br></pre></td></tr></table></figure>
+<h1 id="常量（Constants）"><a href="#常量（Constants）" class="headerlink" title="常量（Constants）"></a>常量（Constants）</h1><p>使用const关键字来定义一个常量。定义常量时需要明确的指定常量的数据类型。</p>
+<h2 id="关于常量，需要注意以下几点"><a href="#关于常量，需要注意以下几点" class="headerlink" title="关于常量，需要注意以下几点"></a>关于常量，需要注意以下几点</h2><ul>
+<li>必须显示指定数据类型</li>
+<li>常量名一般使用大写字母，否则编译器会报 Warning。</li>
+<li>必须使用常量表达式进行赋值，即必须是编译期能计算出的值。</li>
+<li>常量不支持重定义(遮蔽)，这和变量是不同的。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 常量声明</span><br><span class="line">const NUM: i32 = 5;</span><br><span class="line">println!(&quot;constants values is &#123;&#125;&quot;, NUM);</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="不可变变量和常量的区别？"><a href="#不可变变量和常量的区别？" class="headerlink" title="不可变变量和常量的区别？"></a>不可变变量和常量的区别？</h2><ul>
+<li>关键字：常量使用const声明，不可变变量使用let</li>
+<li>赋值时机：常量在编译期就确定了值，无法再运行时改变。不可变变量直到运行期才能确定下来</li>
+<li>能否改变：常量不可以修改，不可变变量可以通过shadowing来修改</li>
+<li>声明：常量必须声明类型，不可变变量不需要</li>
+<li>命名：常量必须使用大写字母，不可变变量不需要</li>
+</ul>
+<h1 id="静态变量（Static）"><a href="#静态变量（Static）" class="headerlink" title="静态变量（Static）"></a>静态变量（Static）</h1><p>使用static关键字声明，并在编译时分配内存，且在程序运行期间一直存在；</p>
+<p>静态变量可以在整个程序中共享，且可以再多个线程间共享；</p>
+<p>静态变量的值在运行期间不会改变，因此它们通常用于存储程序的全局状态。</p>
+<h2 id="静态变量与常量的相似之处"><a href="#静态变量与常量的相似之处" class="headerlink" title="静态变量与常量的相似之处"></a>静态变量与常量的相似之处</h2><ul>
+<li>定义方式类型，一个使用 static，一个使用const;</li>
+<li>名称都要求使用大写，否则会报 Warning;</li>
+<li>都必须明确指定类型;</li>
+<li>两者都要求必须使用常量表达式进行赋值，即必须是编译期能计算出的值;</li>
+<li>两者都不支持重定义(遮蔽)，这和变量是不同的。</li>
+</ul>
+<h2 id="静态变量和常量区别"><a href="#静态变量和常量区别" class="headerlink" title="静态变量和常量区别"></a>静态变量和常量区别</h2><ul>
+<li>常量在编译时被内联，但静态变量不会。在整个程序中静态变量只有一个实例，也就是说所有引用都指向同一个地址 。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 常量的内联</span><br><span class="line">const A: i32 = 1;</span><br><span class="line">static B: i32 = 2;</span><br><span class="line">fn main () &#123;</span><br><span class="line">	println!&#123;&quot;const value = &#123;&#125;&quot;, A&#125;;</span><br><span class="line">	//在编译期间，常量的访问会被替换成常量的值（内联）</span><br><span class="line">	//所以上面的代码会被编译成：println!&#123;&quot;const value = &#123;&#125;&quot;, 1&#125;;</span><br><span class="line">  </span><br><span class="line">  // 但是静态变量的访问指向的是这个变量所对应的内存地址</span><br><span class="line">  println!&#123;&quot;static value = &#123;&#125;&quot;, B&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>常量不可变，而静态变量和普通变量一样，默认不可变但可以通过 mut 关键字定义为可变。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 声明一个可变的静态变量</span><br><span class="line">static mut NUM: i32 = 30;</span><br><span class="line"></span><br><span class="line">// 静态变量是全局的，多线程共享的。对它的值的修改不是线程安全的，需要把这段代码放入unsafe代码块中执行。否则编译期间会报错。这里只是举例</span><br><span class="line">unsafe &#123;</span><br><span class="line">	NUM += 1;</span><br><span class="line">	println!(&quot;the static value is &#123;&#125;&quot;, NUM);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="作用域和遮蔽-variableshadowing"><a href="#作用域和遮蔽-variableshadowing" class="headerlink" title="作用域和遮蔽(variableshadowing)"></a>作用域和遮蔽(variableshadowing)</h1><p>变量绑定有一个作用域(scope)，它被限定只在一个代码块(block)中生存(live)。代码块是一个被{}包围的语句集合。另外也允许变量遮蔽(variable shadowing)。</p>
+<p>通过对不可变变量的重新声明的方式，可以完成对不可变变量值的遮蔽</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 声明一个不可变变量</span><br><span class="line">let short_live_binding: i32 = 2;</span><br><span class="line">println!(&quot;before shadowing -- short variable : &#123;&#125;&quot;, short_live_binding);</span><br><span class="line"></span><br><span class="line">// 遮蔽, 对同一个不可变变量的变量名重新声明赋值</span><br><span class="line">let short_live_binding: i32 = 5;</span><br><span class="line">println!(&quot;after shadowing -- short variable : &#123;&#125;&quot;, short_live_binding);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">before shadowing -- short variable : 2</span><br><span class="line">after shadowing -- short variable : 5</span><br></pre></td></tr></table></figure>
+<p>遮蔽一个比当前作用域声明周期更长的变量的时候，遮蔽的作用范围只在当前的作用域内，超出作用域的变量的值还是遮蔽之前的值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">let global_value: i32 = 1;</span><br><span class="line">// 声明一个代码块</span><br><span class="line">&#123;</span><br><span class="line">	let global_value: i32 = 2;</span><br><span class="line">	// 完成遮蔽</span><br><span class="line">	println!(&quot;in block value is &#123;&#125;&quot;,global_value);</span><br><span class="line">&#125;</span><br><span class="line">// 在遮蔽的作用域外</span><br><span class="line">println!(&quot;global value is &#123;&#125;&quot;, global_value)</span><br></pre></td></tr></table></figure>
+<h2 id="输出-1"><a href="#输出-1" class="headerlink" title="输出"></a>输出</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">in block value is 2</span><br><span class="line">global value is 1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/31/learnRust1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -571,7 +727,7 @@ edition = "2021"
               
                 <a href="/archives%7C%7C%20archive">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

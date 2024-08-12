@@ -1324,7 +1324,19 @@ pre .javascript .function {
   visibility: visible;
 }
 .posts-expand .post-body ul li {
+  list-style: disc;
+}
+.posts-expand .post-body ul ul li {
   list-style: circle;
+}
+.posts-expand .post-body ul ul ul li {
+  list-style: square;
+}
+.posts-expand .post-body ul ul ul ul li {
+  list-style: georgian;
+}
+.posts-expand .post-body ul ul ul ul ul li {
+  list-style: kannada;
 }
 .posts-expand .post-body img {
   box-sizing: border-box;
@@ -1823,7 +1835,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #adff4b;
+  background: #01b5ed;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2990,4 +3002,7 @@ pre .javascript .function {
   .post-body {
     text-align: justify;
   }
+}
+.site-meta {
+  background: #0684bd;
 }
