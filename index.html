@@ -229,6 +229,395 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/14/color/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Byte的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2024/08/14/color/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-08-14T00:58:23+08:00">
+                2024-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ul>
+<li>#E0FFFF: 亮浅蓝色 (Light Cyan)</li>
+<li>#D3E8FF: 淡蓝色 (Pale Blue)</li>
+<li>#F0F8FF: 爱丽丝蓝 (Alice Blue)</li>
+<li>#CCFFFF: 淡青色 (Pale Cyan)</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/14/learnRust4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Byte的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2024/08/14/learnRust4/" itemprop="url">Rust入门-基础 第四节 Rust - 流程控制</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-08-14T00:37:21+08:00">
+                2024-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="if-表达式"><a href="#if-表达式" class="headerlink" title="if 表达式"></a>if 表达式</h1><p>不像 Ruby 或 JavaScript这样的语言，Rust并不会尝试自动地将非布尔值转换为布尔值。必须总是显式地使用布尔值作为 if 条件<br>但凡你能找到一门编程语言没有 if else，那么一定更要反馈给鲁迅，反正不是我说的:) 总之，只要你拥有其它语言的编程经验，就一定会有以下认知：if else 表达式根据条件执行不同的代码分支：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if condition == true &#123;</span><br><span class="line">    // A...</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    // B...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该代码读作：若 condition 的值为 true，则执行 A 代码，否则执行 B 代码。</p>
+<p>先看下面代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let condition = true;</span><br><span class="line">    let number = if condition &#123;</span><br><span class="line">        5</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        6</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    println!(&quot;The value of number is: &#123;&#125;&quot;, number);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码有以下几点要注意：</p>
+<ul>
+<li>if 语句块是表达式，这里我们使用 if 表达式的返回值来给 number 进行赋值：number 的值是 5</li>
+<li>用 if 来赋值时，要保证每个分支返回的类型一样(事实上，这种说法不完全准确，见这里)，此处返回的 5 和 6 就是同一个类型，如果返回类型不一致就会报错</li>
+<li>代码块的值是其最后一个表达式的值，这里继续不谈**语句(statement)和表达式(expression)**的概念，只要知道这里不应该有分号</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let number:i32 = 3;</span><br><span class="line">    if number &lt; 5 &#123;</span><br><span class="line">        println!(&quot;condition was true&quot;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        println!(&quot;condition was false&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="以上代码有以下几点要注意："><a href="#以上代码有以下几点要注意：" class="headerlink" title="以上代码有以下几点要注意："></a>以上代码有以下几点要注意：</h2><ul>
+<li>if 语句块是表达式，这里我们使用 if 表达式的返回值来给 number 进行赋值：number 的值是 5</li>
+<li>用 if 来赋值时，要保证每个分支返回的类型一样(事实上，这种说法不完全准确，见这里)，此处返回的 5 和 6 就是同一个类型，如果返回类型不一致就会报错</li>
+</ul>
+<h1 id="使用-else-if-来处理多重条件"><a href="#使用-else-if-来处理多重条件" class="headerlink" title="使用 else if 来处理多重条件"></a>使用 else if 来处理多重条件</h1><p>可以将 else if 与 if、else 组合在一起实现更复杂的条件分支判断：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let n = 6;</span><br><span class="line"></span><br><span class="line">    if n % 4 == 0 &#123;</span><br><span class="line">        println!(&quot;number is divisible by 4&quot;);</span><br><span class="line">    &#125; else if n % 3 == 0 &#123;</span><br><span class="line">        println!(&quot;number is divisible by 3&quot;);</span><br><span class="line">    &#125; else if n % 2 == 0 &#123;</span><br><span class="line">        println!(&quot;number is divisible by 2&quot;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        println!(&quot;number is not divisible by 4, 3, or 2&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>程序执行时，会按照自上至下的顺序执行每一个分支判断，一旦成功，则跳出 if 语句块，最终本程序会匹配执行 else if n % 3 &#x3D;&#x3D; 0 的分支，输出 “number is divisible by 3”。<br>有一点要注意，就算有多个分支能匹配，也只有第一个匹配的分支会被执行！<br>如果代码中有大量的 else if 会让代码变得极其丑陋，不过不用担心，下一章的 match 专门用以解决多分支模式匹配的问题。</p>
+<h1 id="循环控制"><a href="#循环控制" class="headerlink" title="循环控制"></a>循环控制</h1><p>循环无处不在，上到数钱，下到数年，你能想象的很多场景都存在循环，因此它也是流程控制中最重要的组成部分之一。</p>
+<p>在 Rust 语言中有三种循环方式：for、while 和 loop，其中 for 循环是 Rust 循环王冠上的明珠。</p>
+<h1 id="for-循环"><a href="#for-循环" class="headerlink" title="for 循环"></a>for 循环</h1><h2 id="for-循环是-Rust-的大杀器："><a href="#for-循环是-Rust-的大杀器：" class="headerlink" title="for 循环是 Rust 的大杀器："></a>for 循环是 Rust 的大杀器：</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    for i in 1..=5 &#123;</span><br><span class="line">        println!(&quot;&#123;&#125;&quot;, i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码循环输出一个从 1 到 5 的序列，简单粗暴，核心就在于 for 和 in 的联动，语义表达如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for 元素 in 集合 &#123;</span><br><span class="line">  // 使用元素干一些你懂我不懂的事情</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个语法跟 JavaScript 还蛮像，应该挺好理解。</p>
+<p>注意，使用 for 时我们往往使用集合的引用形式，除非你不想在后面的代码中继续使用该集合（比如我们这里使用了 container 的引用）。如果不使用引用的话，所有权会被转移（move）到 for 语句块中，后面就无法再使用这个集合了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for item in &amp;container &#123;</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<table>
+    <tr>
+        <td bgcolor=#F0F8FF>对于实现了 copy 特征的数组(例如 [i32; 10] )而言， for item in arr 并不会把 arr 的所有权转移，而是直接对其进行了拷贝，因此循环之后仍然可以使用 arr 。
+        </td>
+    </tr>
+</table>
+如果想在循环中，修改该元素，可以使用 mut 关键字：
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for item in &amp;mut collection &#123;</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">使用方法</th>
+<th align="center">等价使用方式</th>
+<th align="right">所有权</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">for item in collection</td>
+<td align="center">for item in IntoIterator::into_iter(collection)</td>
+<td align="right">转移所有权</td>
+</tr>
+<tr>
+<td align="left">for item in &amp;collection</td>
+<td align="center">for item in collection.iter()</td>
+<td align="right">不可变借用</td>
+</tr>
+<tr>
+<td align="left">for item in &amp;mut collection</td>
+<td align="center">for item in collection.iter_mut()</td>
+<td align="right">可变借用</td>
+</tr>
+</tbody></table>
+<style>
+  table {
+    font-size: 12px;
+  }
+</style>
+<p>如果想在循环中获取元素的索引：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let a = [4, 3, 2, 1];</span><br><span class="line">    // `.iter()` 方法把 `a` 数组变成一个迭代器</span><br><span class="line">    for (i, v) in a.iter().enumerate() &#123;</span><br><span class="line">        println!(&quot;第&#123;&#125;个元素是&#123;&#125;&quot;, i + 1, v);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有同学可能会想到，如果我们想用 for 循环控制某个过程执行 10 次，但是又不想单独声明一个变量来控制这个流程，该怎么写？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//有点类似lua的写法</span><br><span class="line">for _ in 0..10 &#123;</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以用 _ 来替代 i 用于 for 循环中，在 Rust 中 _ 的含义是忽略该值或者类型的意思，如果不使用 _，那么编译器会给你一个 变量未使用的 的警告。</p>
+<h2 id="两种循环方式优劣对比"><a href="#两种循环方式优劣对比" class="headerlink" title="两种循环方式优劣对比"></a>两种循环方式优劣对比</h2><p>以下代码，使用了两种循环方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 第一种</span><br><span class="line">let collection = [1, 2, 3, 4, 5];</span><br><span class="line">for i in 0..collection.len() &#123;</span><br><span class="line">  let item = collection[i];</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 第二种</span><br><span class="line">for item in collection &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一种方式是循环索引，然后通过索引下标去访问集合，第二种方式是直接循环集合中的元素，优劣如下：</p>
+<ul>
+<li>性能：第一种使用方式中 collection[index] 的索引访问，会因为边界检查(Bounds Checking)导致运行时的性能损耗 —— Rust 会检查并确认 index 是否落在集合内，但是第二种直接迭代的方式就不会触发这种检查，因为编译器会在编译时就完成分析并证明这种访问是合法的</li>
+<li>安全：第一种方式里对 collection 的索引访问是非连续的，存在一定可能性在两次访问之间，collection 发生了变化，导致脏数据产生。而第二种直接迭代的方式是连续访问，因此不存在这种风险( 由于所有权限制，在访问过程中，数据并不会发生变化)。<br>由于 for 循环无需任何条件限制，也不需要通过索引来访问，因此是最安全也是最常用的，通过与下面的 while 的对比，我们能看到为什么 for 会更加安全。</li>
+</ul>
+<h1 id="continue"><a href="#continue" class="headerlink" title="continue"></a>continue</h1><p>使用 continue 可以跳过当前当次的循环，开始下次的循环：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">for i in 1..4 &#123;</span><br><span class="line">    if i == 2 &#123;</span><br><span class="line">        continue;</span><br><span class="line">    &#125;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码对 1 到 3 的序列进行迭代，且跳过值为 2 时的循环，输出如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+
+<h1 id="break"><a href="#break" class="headerlink" title="break"></a>break</h1><p>使用 break 可以直接跳出当前整个循环：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">for i in 1..4 &#123;</span><br><span class="line">    if i == 2 &#123;</span><br><span class="line">        break;</span><br><span class="line">    &#125;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码对 1 到 3 的序列进行迭代，在遇到值为 2 时的跳出整个循环，后面的循环不再执行，输出如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<h1 id="while-循环"><a href="#while-循环" class="headerlink" title="while 循环"></a>while 循环</h1><p>如果你需要一个条件来循环，当该条件为 true 时，继续循环，条件为 false，跳出循环，那么 while 就非常适用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut n = 0;</span><br><span class="line"></span><br><span class="line">    while n &lt;= 5  &#123;</span><br><span class="line">        println!(&quot;&#123;&#125;!&quot;, n);</span><br><span class="line"></span><br><span class="line">        n = n + 1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    println!(&quot;我出来了！&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该 while 循环，只有当 n 小于等于 5 时，才执行，否则就立刻跳出循环，因此在上述代码中，它会先从 0 开始，满足条件，进行循环，然后是 1，满足条件，进行循环，最终到 6 的时候，大于 5，不满足条件，跳出 while 循环，执行 我出来了 的打印，然后程序结束：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">0!</span><br><span class="line">1!</span><br><span class="line">2!</span><br><span class="line">3!</span><br><span class="line">4!</span><br><span class="line">5!</span><br><span class="line">我出来了！</span><br></pre></td></tr></table></figure>
+<p>当然，你也可以用其它方式组合实现，例如 loop（无条件循环，将在下面介绍） + if + break：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut n = 0;</span><br><span class="line"></span><br><span class="line">    loop &#123;</span><br><span class="line">        if n &gt; 5 &#123;</span><br><span class="line">            break</span><br><span class="line">        &#125;</span><br><span class="line">        println!(&quot;&#123;&#125;&quot;, n);</span><br><span class="line">        n+=1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    println!(&quot;我出来了！&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，在这种循环场景下，while 要简洁的多。</p>
+<h1 id="while-vs-for"><a href="#while-vs-for" class="headerlink" title="while vs for"></a>while vs for</h1><p>我们也能用 while 来实现 for 的功能：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let a = [10, 20, 30, 40, 50];</span><br><span class="line">    let mut index = 0;</span><br><span class="line"></span><br><span class="line">    while index &lt; 5 &#123;</span><br><span class="line">        println!(&quot;the value is: &#123;&#125;&quot;, a[index]);</span><br><span class="line"></span><br><span class="line">        index = index + 1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里，代码对数组中的元素进行计数。它从索引 0 开始，并接着循环直到遇到数组的最后一个索引（这时，index &lt; 5 不再为真）。运行这段代码会打印出数组中的每一个元素：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">the value is: 10</span><br><span class="line">the value is: 20</span><br><span class="line">the value is: 30</span><br><span class="line">the value is: 40</span><br><span class="line">the value is: 50</span><br></pre></td></tr></table></figure>
+<p>数组中的所有五个元素都如期被打印出来。尽管 index 在某一时刻会到达值 5，不过循环在其尝试从数组获取第六个值（会越界）之前就停止了。</p>
+<p>但这个过程很容易出错；如果索引长度不正确会导致程序 panic。这也使程序更慢，因为编译器增加了运行时代码来对每次循环的每个元素进行条件检查。</p>
+<p>for循环代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let a = [10, 20, 30, 40, 50];</span><br><span class="line"></span><br><span class="line">    for element in a.iter() &#123;</span><br><span class="line">        println!(&quot;the value is: &#123;&#125;&quot;, element);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，for 并不会使用索引去访问数组，因此更安全也更简洁，同时避免 运行时的边界检查，性能更高。</p>
+<h1 id="loop-循环"><a href="#loop-循环" class="headerlink" title="loop 循环"></a>loop 循环</h1><p>对于循环而言，loop 循环毋庸置疑，是适用面最高的，它可以适用于所有循环场景（虽然能用，但是在很多场景下， for 和 while 才是最优选择），因为 loop 就是一个简单的无限循环，你可以在内部实现逻辑通过 break 关键字来控制循环何时结束。</p>
+<p>使用 loop 循环一定要打起精神，否则你会写出下面的跑满你一个 CPU 核心的疯子代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    loop &#123;</span><br><span class="line">        println!(&quot;again!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该循环会不停的在终端打印输出，直到你使用 Ctrl-C 结束程序：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">again!</span><br><span class="line">again!</span><br><span class="line">again!</span><br><span class="line">again!</span><br><span class="line">^Cagain!</span><br></pre></td></tr></table></figure>
+<p>注意，不要轻易尝试上述代码，如果你电脑配置不行，可能会死机！！！</p>
+<p>因此，当使用 loop 时，必不可少的伙伴是 break 关键字，它能让循环在满足某个条件时跳出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut counter = 0;</span><br><span class="line"></span><br><span class="line">    let result = loop &#123;</span><br><span class="line">        counter += 1;</span><br><span class="line"></span><br><span class="line">        if counter == 10 &#123;</span><br><span class="line">            break counter * 2;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    println!(&quot;The result is &#123;&#125;&quot;, result);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码当 counter 递增到 10 时，就会通过 break 返回一个 counter * 2 的值，最后赋给 result 并打印出来。</p>
+<p>这里有几点值得注意：</p>
+<ul>
+<li>break 可以单独使用，也可以带一个返回值，有些类似 return</li>
+<li>loop 是一个表达式，因此可以返回一个值</li>
+</ul>
+<h1 id="练习题"><a href="#练习题" class="headerlink" title="练习题"></a>练习题</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// 填空</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let n = 5;</span><br><span class="line"></span><br><span class="line">    if n &lt; 0 &#123;</span><br><span class="line">        println!(&quot;&#123;&#125; is negative&quot;, n);</span><br><span class="line">    &#125; else if n &gt; 0 &#123;</span><br><span class="line">        println!(&quot;&#123;&#125; is positive&quot;, n);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        println!(&quot;&#123;&#125; is zero&quot;, n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 修复错误</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let n = 5;</span><br><span class="line"></span><br><span class="line">    let big_n =  </span><br><span class="line">    if n &lt; 10 &amp;&amp; n &gt; -10 &#123;</span><br><span class="line">        println!(&quot; 数字太小，先增加 10 倍再说&quot;);</span><br><span class="line"></span><br><span class="line">         10 * n</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        println!(&quot;数字太大，我们得让它减半&quot;);</span><br><span class="line"></span><br><span class="line">        n / 2 </span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    println!(&quot;&#123;&#125; -&gt; &#123;&#125;&quot;, n, big_n);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    for n in 1..=99 &#123; // 修改此行，让代码工作</span><br><span class="line">        if n == 100 &#123;</span><br><span class="line">            panic!(&quot;NEVER LET THIS RUN&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line">//</span><br><span class="line">//fn main() &#123;</span><br><span class="line">    //for n in 1..99 &#123; // 修改此行，让代码工作</span><br><span class="line">        //if n == 100 &#123;</span><br><span class="line">            //panic!(&quot;NEVER LET THIS RUN&quot;)</span><br><span class="line">        //&#125;</span><br><span class="line">    //&#125;</span><br><span class="line">//&#125; </span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 修复错误，不要新增或删除代码行</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let names = [String::from(&quot;liming&quot;),String::from(&quot;hanmeimei&quot;)];</span><br><span class="line">    for name in &amp;names &#123;</span><br><span class="line">        // do something with name...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    println!(&quot;&#123;:?&#125;&quot;, names);</span><br><span class="line"></span><br><span class="line">    let numbers = [1, 2, 3];</span><br><span class="line">    // numbers中的元素实现了 Copy，因此无需转移所有权</span><br><span class="line">    for n in numbers &#123;</span><br><span class="line">        // do something with name...</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    println!(&quot;&#123;:?&#125;&quot;, numbers);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let a = [4,3,2,1];</span><br><span class="line"></span><br><span class="line">    // 通过索引和值的方式迭代数组 `a` </span><br><span class="line">    for (i,v) in a.iter().enumerate() &#123;</span><br><span class="line">        println!(&quot;第&#123;&#125;个元素是&#123;&#125;&quot;,i+1,v);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 填空，让最后一行的  println! 工作 !</span><br><span class="line">fn main() &#123;</span><br><span class="line">    // 一个计数值</span><br><span class="line">    let mut n = 1;</span><br><span class="line"></span><br><span class="line">    // 当条件为真时，不停的循环</span><br><span class="line">    while n &lt; 10 &#123;</span><br><span class="line">        if n % 15 == 0 &#123;</span><br><span class="line">            println!(&quot;fizzbuzz&quot;);</span><br><span class="line">        &#125; else if n % 3 == 0 &#123;</span><br><span class="line">            println!(&quot;fizz&quot;);</span><br><span class="line">        &#125; else if n % 5 == 0 &#123;</span><br><span class="line">            println!(&quot;buzz&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            println!(&quot;&#123;&#125;&quot;, n);</span><br><span class="line">        &#125;</span><br><span class="line">        n = n + 1;</span><br><span class="line">        break;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    println!(&quot;n 的值是 &#123;&#125;, 循环结束&quot;,n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="7">
+<li><p>🌟 使用 break 可以跳出循环</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 填空，不要修改其它代码</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut n = 0;</span><br><span class="line">    for i in 0..=100 &#123;</span><br><span class="line">       if n == 66 &#123;</span><br><span class="line">           break;</span><br><span class="line">       &#125;</span><br><span class="line">       n += 1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    assert_eq!(n, 66);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>🌟🌟 continue 会结束当次循环并立即开始下一次循环</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 填空，不要修改其它代码</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut n = 0;</span><br><span class="line">    for i in 0..=100 &#123;</span><br><span class="line">       if n != 66 &#123;</span><br><span class="line">           n+=1;</span><br><span class="line">           continue;</span><br><span class="line">       &#125;</span><br><span class="line">       </span><br><span class="line">       break;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    assert_eq!(n, 66);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>🌟🌟 loop 一般都需要配合 break 或 continue 一起使用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 填空，不要修改其它代码</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut count = 0u32;</span><br><span class="line"></span><br><span class="line">    println!(&quot;Let&#x27;s count until infinity!&quot;);</span><br><span class="line"></span><br><span class="line">    // 无限循环</span><br><span class="line">    loop &#123;</span><br><span class="line">        count += 1;</span><br><span class="line"></span><br><span class="line">        if count == 3 &#123;</span><br><span class="line">            println!(&quot;three&quot;);</span><br><span class="line"></span><br><span class="line">            // 跳过当此循环的剩余代码</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        println!(&quot;&#123;&#125;&quot;, count);</span><br><span class="line"></span><br><span class="line">        if count == 5 &#123;</span><br><span class="line">            println!(&quot;OK, that&#x27;s enough&quot;);</span><br><span class="line"></span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    assert_eq!(count, 5);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>🌟🌟 loop 是一个表达式，因此我们可以配合 break 来返回一个值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 填空</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut counter = 0;</span><br><span class="line"></span><br><span class="line">    let result = loop &#123;</span><br><span class="line">        counter += 1;</span><br><span class="line"></span><br><span class="line">        if counter == 10 &#123;</span><br><span class="line">            break counter + 10</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    assert_eq!(result, 20);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>🌟🌟🌟 当有多层循环时，你可以使用 continue 或 break 来控制外层的循环。要实现这一点，外部的循环必须拥有一个标签 ‘label, 然后在 break 或 continue 时指定该标签</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 填空</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut count = 0;</span><br><span class="line">    &#x27;outer: loop &#123;</span><br><span class="line">        &#x27;inner1: loop &#123;</span><br><span class="line">            if count &gt;= 20 &#123;</span><br><span class="line">                // 这只会跳出 inner1 循环</span><br><span class="line">                break &#x27;inner1; // 这里使用 `break` 也是一样的</span><br><span class="line">            &#125;</span><br><span class="line">            count += 2;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        count += 5;</span><br><span class="line"></span><br><span class="line">        &#x27;inner2: loop &#123;</span><br><span class="line">            if count &gt;= 30 &#123;</span><br><span class="line">                break &#x27;outer;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            continue &#x27;outer;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    assert!(count == 30)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/13/learnRust3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -308,7 +697,8 @@
 <li>函数体i+j</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fn add(i:i32,j:i32)-&gt; i32 &#123;</span><br><span class="line">    i + j</span><br><span class="line">&#125;</span><br><span class="line">fn main()&#123;</span><br><span class="line">    let a = 1;</span><br><span class="line">    let b = 2;</span><br><span class="line">    let c = add(2, b);</span><br><span class="line">    printin!(&quot;&#123;&#125;&quot;,c);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="函数名"><a href="#函数名" class="headerlink" title="函数名"></a>函数名</h1><ul>
+<p>该函数如此简单，但是又是如此的五脏俱全，声明函数的关键字 fn ,函数名 add()，参数 i 和 j，参数类型和返回值类型都是 i32，总之一切那么的普通，但是又那么的自信，直到你看到了下面这张图：<br><img src="/../images/function.png"><br>当你看懂了这张图，其实就等于差不多完成了函数章节的学习，但是这么短的章节显然对不起读者老爷们的厚爱，所以我们来展开下。</p>
+<h1 id="函数要点"><a href="#函数要点" class="headerlink" title="函数要点"></a>函数要点</h1><ul>
 <li>开头是字符，后面是数字，下划线，字母</li>
 <li>开头是下划线，后面是数字，下划线，字母，不能仅有下划线</li>
 <li>通数名和变量名使用蛇形命名法(snakecase)，例如fn add_two() &#x3D;&gt; {}</li>
@@ -321,8 +711,25 @@
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn add(i:i32, j:i32)-&gt; i32 &#123;</span><br><span class="line">    i + j</span><br><span class="line">&#125;</span><br><span class="line">fn add(i:i32, j:i32)-&gt; i32 &#123;</span><br><span class="line">    return i + j;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="无返回值"><a href="#无返回值" class="headerlink" title="无返回值()"></a>无返回值()</h2><p>如果一个的数没有返回值，那么就返回()</p>
+
+<h1 id="Rust-中的特殊返回类型"><a href="#Rust-中的特殊返回类型" class="headerlink" title="Rust 中的特殊返回类型"></a>Rust 中的特殊返回类型</h1><h2 id="无返回值"><a href="#无返回值" class="headerlink" title="无返回值()"></a>无返回值()</h2><p>如果一个的数没有返回值，那么就返回()</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn print(i: i32)&#123;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, i);</span><br><span class="line">&#125;</span><br><span class="line">fn print(i:i32) -&gt;() &#123;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于 Rust 新手来说，有些返回类型很难理解，而且如果你想通过百度或者谷歌去搜索，都不好查询，因为这些符号太常见了，根本难以精确搜索到。</p>
+<p>例如单元类型 ()，是一个零长度的元组。它没啥作用，但是可以用来表达一个函数没有返回值：</p>
+<p>函数没有返回值，那么返回一个 ()<br>通过 ; 结尾的语句返回一个 ()<br>例如下面的 report 函数会隐式返回一个 ()：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use std::fmt::Debug;</span><br><span class="line"></span><br><span class="line">fn report&lt;T: Debug&gt;(item: T) &#123;</span><br><span class="line">  println!(&quot;&#123;:?&#125;&quot;, item);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与上面的函数返回值相同，但是下面的函数显式的返回了 ()：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn clear(text: &amp;mut String) -&gt; () &#123;</span><br><span class="line">  *text = String::from(&quot;&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在实际编程中，你会经常在错误提示中看到该 () 的身影出没，假如你的函数需要返回一个 u32 值，但是如果你不幸的以 表达式; 的语句形式作为函数的最后一行代码，就会报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn add(x:u32,y:u32) -&gt; u32 &#123;</span><br><span class="line">    x + y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>错误如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">error[E0308]: mismatched types // 类型不匹配</span><br><span class="line"> --&gt; src/main.rs:6:24</span><br><span class="line">  |</span><br><span class="line">6 | fn add(x:u32,y:u32) -&gt; u32 &#123;</span><br><span class="line">  |    ---                 ^^^ expected `u32`, found `()` // 期望返回u32,却返回()</span><br><span class="line">  |    |</span><br><span class="line">  |    implicitly returns `()` as its body has no tail or `return` expression</span><br><span class="line">7 |     x + y;</span><br><span class="line">  |          - help: consider removing this semicolon</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>还记得我们在语句与表达式中讲过的吗？只有表达式能返回值，而 ; 结尾的是语句，在 Rust 中，一定要严格区分表达式和语句的区别，这个在其它语言中往往是被忽视的点。</p>
+<h1 id="永不返回的发散函数"><a href="#永不返回的发散函数" class="headerlink" title="永不返回的发散函数 !"></a>永不返回的发散函数 !</h1><p>当用 ! 作函数返回类型的时候，表示该函数永不返回( diverge function )，特别的，这种语法往往用做会导致程序崩溃的函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn dead_end() -&gt; ! &#123;</span><br><span class="line">  panic!(&quot;你已经到了穷途末路，崩溃吧！&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面的函数创建了一个无限循环，该循环永不跳出，因此函数也永不返回：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fn forever() -&gt; ! &#123;</span><br><span class="line">  loop &#123;</span><br><span class="line">    //...</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="练习题"><a href="#练习题" class="headerlink" title="练习题"></a>练习题</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    // 不要修改下面两行代码!</span><br><span class="line">    let (x, y) = (1, 2);</span><br><span class="line">    let s = sum(x, y);</span><br><span class="line">    print(s);</span><br><span class="line">    assert_eq!(s, 3);</span><br><span class="line">&#125;</span><br><span class="line">fn print(i: i32)&#123;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, i);</span><br><span class="line">&#125;</span><br><span class="line">fn sum(x:i32, y: i32) -&gt; i32 &#123;</span><br><span class="line">    return x + y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    print();</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> // 使用另一个类型来替代 i32</span><br><span class="line"> fn print() -&gt; () &#123;</span><br><span class="line">    println!(&quot;hello,world&quot;);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
@@ -664,7 +1071,7 @@
 <p>官方的 Rust，作者是 The Rust Programming Language, 官方出品，牛逼就完了，但是……我们并不推荐（事实上已经不再维护了，官方收编了第二个插件，现在第二个插件的作者也是 The Rust Programming Language），这个插件有几个问题：<br>首先是在代码跳转上支持的很烂，只能在自己的代码库中跳转，一旦跳到别的三方库，那就无法继续跳转，对于查看标准库和三方库的源码带来了极大的困扰<br>其次，不支持类型自动标注，对于 Rust 语言而言，类型说明是非常重要的，特别是在你不知道给变量一个什么类型时，这种 IDE 的自动提示就变得弥足珍贵<br>代码提示不太好用，有些方法既不会提示，也不能跳转<br>社区驱动的 rust-analyzer，非常推荐，上面说的所有问题，在这个插件上都得到了解决，不得不说，Rust 社区 yyds!<br>所以，综上所述，我们选择 rust-analyzer 作为 Rust 语言的插件，具体的安装很简单，点击插件，选择安装即可，根据提示可能需要重新加载 IDE。</p>
 <table>
     <tr>
-        <td bgcolor=#87CEFA>在搜索 VSCode 插件时，报错：提取扩展出错，XHR failed，这个报错是因为网络原因导致，很可能是你的网络不行或者翻墙工具阻拦你的访问，试着关掉翻墙，再进行尝试。</td>
+        <td bgcolor=#F0F8FF>在搜索 VSCode 插件时，报错：提取扩展出错，XHR failed，这个报错是因为网络原因导致，很可能是你的网络不行或者翻墙工具阻拦你的访问，试着关掉翻墙，再进行尝试。</td>
     </tr>
 </table>
 
@@ -672,7 +1079,7 @@
 <p>当插件使用默认设置时，每一次保存代码，都会出进行一次重新编译。</p>
 <table>
     <tr>
-        <td bgcolor=#87CEFA>如果你的电脑慢，有一点一定要注意：
+        <td bgcolor=#F0F8FF>如果你的电脑慢，有一点一定要注意：
 在编译器构建代码的同时，不要在终端再运行 cargo run 等命令进行编译，不然会获得一个报错提示，大意是当前文件目录已经被锁定，等待其它使用者释放。如果等了很久 IDE 还是没有释放（虽然我没遇到过，但是存在这个可能性），你可以关掉 IDE，并手动 kill 掉 rust-analyzer，然后重新尝试。</td>
     </tr>
 </table>
@@ -705,7 +1112,7 @@
 <p>上面的命令使用 cargo new 创建一个项目，项目名是 world_hello （向读者势力低头的项目名称，泪奔），该项目的结构和配置文件都是由 cargo 生成，意味着我们的项目被 cargo 所管理。</p>
 <table>
     <tr>
-        <td bgcolor=#87CEFA>如果你在终端无法使用这个命令，考虑一下 环境变量 是否正确的设置：把 cargo 可执行文件所在的目录添加到环境变量中。
+        <td bgcolor=#F0F8FF>如果你在终端无法使用这个命令，考虑一下 环境变量 是否正确的设置：把 cargo 可执行文件所在的目录添加到环境变量中。
 
 <p>如果是在 Windows 的 WSL2 子系统下，出现以下错误：</p>
 <p>error: command failed: ‘rustc’ error: caused by: Permission denied (os error 13)</p>
@@ -754,13 +1161,13 @@
 <p>为什么需要Cargo.lock文件<br>确保任何人在任何时候重新构建代码，都会产生相同的结果:Cargo只会使用你指定的依赖版本</p>
 <p>当你 确实 需要升级 crate 时，Cargo提供了这样一个命令，update，它会忽路 Carga.&#x2F;ock文件，并计算出所有符合 Cargo.tom声明的最新版本。Cargo接下来会把这些版本写入Carga.1ock文件。不过，Cargo默认只会寻找大于 0.8.5 而小于 0.9.0 的版本。如果rand crate发布了两个新版本，0.8.6和0.9.0，在运行 cargo update 时会出现如下内容:</p>
 <table>
-    <td bgcolor=#87CEFA>$ cargo updateUpdating crates.io indexUpdating randv.8.5->v.8.6
+    <td bgcolor=#F0F8FF>$ cargo updateUpdating crates.io indexUpdating randv.8.5->v.8.6
     </td>
 </table>
 
 <p>Cargo 忽略了 0.9.0版本。这时，你也会注意到的 Carg.1ock文件中的变化无外乎现在使用的 rand crate版本是 0.8.6。如<br>果想要使用 0.9.0版本的rand 或是任何 0.9.x 系列的版本，必须像这样更新 Cargo.tom&#x2F;文件:</p>
 <table>
-    <td bgcolor=#87CEFA>[dependencies]
+    <td bgcolor=#F0F8FF>[dependencies]
 rand = "0.9.0"
     </td>
 </table>
@@ -774,7 +1181,7 @@ rand = "0.9.0"
 <p>什么情况下该把 Cargo.lock 上传到 git 仓库里？很简单，当你的项目是一个可运行的程序时，就上传 Cargo.lock，如果是一个依赖库项目，那么请把它添加到 .gitignore 中。</p>
 <p>现在用 VSCode 打开上面创建的”世界，你好”项目，然后进入根目录的 Cargo.toml 文件，可以看到该文件包含不少信息：<br>package 配置段落<br>package 中记录了项目的描述信息，典型的如下：</p>
 <table>
-    <td bgcolor=#87CEFA>[package]
+    <td bgcolor=#F0F8FF>[package]
 name = "world_hello"
 version = "0.1.0"
 edition = "2021"
@@ -877,7 +1284,7 @@ edition = "2021"
               
                 <a href="/archives%7C%7C%20archive">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
