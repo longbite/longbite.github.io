@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="上节中提到，如果仅仅支持通过转移所有权的方式获取一个值，那会让程序变得复杂。 Rust 能否像其它编程语言一样，使用某个变量的指针或者引用呢？答案是可以。 Rust 通过 借用(Borrowing) 这个概念来达成上述的目的，获取变量的引用，称之为借用(borrowing)。正如现实生活中，如果一个人拥有某样东西，你可以从他那里借来，当使用完毕后，也必须要物归原主。  不可变引用(Immutabl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust入门-基础 第七节 引用与借用">
+<meta property="og:url" content="http://example.com/2024/08/22/learnRust7/index.html">
+<meta property="og:site_name" content="Byte的博客">
+<meta property="og:description" content="上节中提到，如果仅仅支持通过转移所有权的方式获取一个值，那会让程序变得复杂。 Rust 能否像其它编程语言一样，使用某个变量的指针或者引用呢？答案是可以。 Rust 通过 借用(Borrowing) 这个概念来达成上述的目的，获取变量的引用，称之为借用(borrowing)。正如现实生活中，如果一个人拥有某样东西，你可以从他那里借来，当使用完毕后，也必须要物归原主。  不可变引用(Immutabl">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/Borrowing.png">
+<meta property="og:image" content="http://example.com/images/slice.png">
+<meta property="article:published_time" content="2024-08-22T14:57:27.050Z">
+<meta property="article:modified_time" content="2024-08-22T16:49:14.428Z">
+<meta property="article:author" content="One Byte">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/Borrowing.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2024/08/22/learnRust7/"/>
+
+
+
+
+
+  <title>Rust入门-基础 第七节 引用与借用 | Byte的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Byte的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/22/learnRust7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Byte的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Rust入门-基础 第七节 引用与借用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-08-22T22:57:27+08:00">
+                2024-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上节中提到，如果仅仅支持通过转移所有权的方式获取一个值，那会让程序变得复杂。 Rust 能否像其它编程语言一样，使用某个变量的指针或者引用呢？答案是可以。</p>
+<p>Rust 通过 借用(Borrowing) 这个概念来达成上述的目的，获取变量的引用，称之为借用(borrowing)。正如现实生活中，如果一个人拥有某样东西，你可以从他那里借来，当使用完毕后，也必须要物归原主。</p>
+<ul>
+<li><strong>不可变引用(Immutable Reference)</strong>:通过不可变引用,可以读取数据,但不能修改数据.一个变量可以有多个不可变引用,但不能与可变引用共存.</li>
+<li><strong>可变引用(Mutable Reference)</strong>:通过可变引用,可以读取和修改数据.一个变量在某一时刻只能有一个可变引用,且不能与不可变引用共存.</li>
+</ul>
+<p><strong>move&amp;borrowing&amp;referencing</strong></p>
+<ul>
+<li>move堆数据所有权</li>
+<li>borrowing 函数</li>
+<li>referencing 变量</li>
+</ul>
+<h1 id="1-引用与解引用"><a href="#1-引用与解引用" class="headerlink" title="1.引用与解引用"></a>1.引用与解引用</h1><p>常规引用是一个指针类型，指向了对象存储的内存地址。在下面代码中，我们创建一个 i32 值的引用 y，然后使用解引用运算符来解出 y 所使用的值:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let x = 5;</span><br><span class="line">    let y = &amp;x;</span><br><span class="line"></span><br><span class="line">    assert_eq!(5, x);</span><br><span class="line">    assert_eq!(5, *y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>变量 x 存放了一个 i32 值 5。y 是 x 的一个引用。可以断言 x 等于 5。然而，如果希望对 y 的值做出断言，必须使用 *y 来解出引用所指向的值（也就是解引用）。一旦解引用了 y，就可以访问 y 所指向的整型值并可以与 5 做比较。</p>
+<p>相反如果尝试编写 assert_eq!(5, y);，则会得到如下编译错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">   Compiling world_hello v0.1.0 (D:\rust\world_hello)</span><br><span class="line">error[E0277]: can&#x27;t compare `&#123;integer&#125;` with `&amp;&#123;integer&#125;`</span><br><span class="line"> --&gt; src/main.rs:6:5</span><br><span class="line">  |</span><br><span class="line">6 |     assert_eq!(5, y);</span><br><span class="line">  |     ^^^^^^^^^^^^^^^^ no implementation for `&#123;integer&#125; == &amp;&#123;integer&#125;`</span><br><span class="line">  |</span><br><span class="line">  = help: the trait `PartialEq&lt;&amp;&#123;integer&#125;&gt;` is not implemented for `&#123;integer&#125;`</span><br><span class="line">  = note: this error originates in the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)</span><br><span class="line">help: consider dereferencing here</span><br><span class="line"> --&gt; C:\Users\Administrator\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\core\src\macros\mod.rs:40:35</span><br><span class="line">  |</span><br><span class="line">40|                 if !(*left_val == **right_val) &#123;</span><br><span class="line">  |                                   +</span><br><span class="line"></span><br><span class="line">For more information about this error, try `rustc --explain E0277`.</span><br></pre></td></tr></table></figure>
+<p>不允许比较整数与引用，因为它们是不同的类型。必须使用解引用运算符解出引用所指向的值。</p>
+<p>不可变引用<br>下面的代码，我们用 s1 的引用作为参数传递给 calculate_length 函数，而不是把 s1 的所有权转移给该函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let s1 = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">    let len = calculate_length(&amp;s1);</span><br><span class="line"></span><br><span class="line">    println!(&quot;The length of &#x27;&#123;&#125;&#x27; is &#123;&#125;.&quot;, s1, len);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn calculate_length(s: &amp;String) -&gt; usize &#123;</span><br><span class="line">    s.len()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>能注意到两点：</p>
+<ol>
+<li>无需像上章一样：先通过函数参数传入所有权，然后再通过函数返回来传出所有权，代码更加简洁</li>
+<li>calculate_length 的参数 s 类型从 String 变为 &amp;String<br>这里，&amp; 符号即是引用，它们允许你使用值，但是不获取所有权，如图所示：<br><img src="/../images/Borrowing.png"><br>通过 &amp;s1 语法，我们创建了一个指向 s1 的引用，但是并不拥有它。因为并不拥有这个值，当引用离开作用域后，其指向的值也不会被丢弃。</li>
+</ol>
+<p>同理，函数 calculate_length 使用 &amp; 来表明参数 s 的类型是一个引用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fn calculate_length(s: &amp;String) -&gt; usize &#123; // s 是对 String 的引用</span><br><span class="line">    s.len()</span><br><span class="line">&#125; // 这里，s 离开了作用域。但因为它并不拥有引用值的所有权，</span><br><span class="line">  // 所以什么也不会发生</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>人总是贪心的，可以拉女孩小手了，就想着抱抱柔软的身子（读者中的某老司机表示，这个流程完全不对），因此光借用已经满足不了我们了，如果尝试修改借用的变量呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let s = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">    change(&amp;s);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn change(some_string: &amp;String) &#123;</span><br><span class="line">    some_string.push_str(&quot;, world&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很不幸，妹子你没抱到，哦口误，你修改错了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">error[E0596]: cannot borrow `*some_string` as mutable, as it is behind a `&amp;` reference</span><br><span class="line"> --&gt; src/main.rs:8:5</span><br><span class="line">  |</span><br><span class="line">8 |     some_string.push_str(&quot;, world&quot;);</span><br><span class="line">  |     ^^^^^^^^^^^ `some_string` is a `&amp;` reference, so the data it refers to cannot be borrowed as mutable</span><br><span class="line">  |</span><br><span class="line">help: consider changing this to be a mutable reference</span><br><span class="line">  |</span><br><span class="line">7 | fn change(some_string: &amp;mut String) &#123;</span><br><span class="line">  |                         +++</span><br><span class="line"></span><br><span class="line">error: aborting due to 1 previous error</span><br><span class="line"></span><br><span class="line">For more information about this error, try `rustc --explain E0596`.</span><br></pre></td></tr></table></figure>
+<p>正如变量默认不可变一样，引用指向的值默认也是不可变的，没事，来一起看看如何解决这个问题。</p>
+<h1 id="2-可变引用"><a href="#2-可变引用" class="headerlink" title="2.可变引用"></a>2.可变引用</h1><p>只需要一个小调整，即可修复上面代码的错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">    change(&amp;mut s);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn change(some_string: &amp;mut String) &#123;</span><br><span class="line">    some_string.push_str(&quot;, world&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先，声明 s 是可变类型，其次创建一个可变的引用 &amp;mut s 和接受可变引用参数 some_string: &amp;mut String 的函数。<br><strong>可变引用同时只能存在一个</strong><br>不过可变引用并不是随心所欲、想用就用的，它有一个很大的限制： 同一作用域，特定数据只能有一个可变引用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">let mut s = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">let r1 = &amp;mut s;</span><br><span class="line">let r2 = &amp;mut s;</span><br><span class="line"></span><br><span class="line">println!(&quot;&#123;&#125;, &#123;&#125;&quot;, r1, r2);</span><br></pre></td></tr></table></figure>
+<p>以上代码会报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">error[E0499]: cannot borrow `s` as mutable more than once at a time</span><br><span class="line"> --&gt; src/main.rs:5:14</span><br><span class="line">  |</span><br><span class="line">4 |     let r1 = &amp;mut s;</span><br><span class="line">  |              ------ first mutable borrow occurs here</span><br><span class="line">5 |     let r2 = &amp;mut s;</span><br><span class="line">  |              ^^^^^^ second mutable borrow occurs here</span><br><span class="line">6 |     </span><br><span class="line">7 |     println!(&quot;&#123;&#125;, &#123;&#125;&quot;, r1, r2);</span><br><span class="line">  |                        -- first borrow later used here</span><br><span class="line"></span><br><span class="line">error: aborting due to 1 previous error</span><br></pre></td></tr></table></figure>
+<p>这段代码出错的原因在于，第一个可变借用 r1 必须要持续到最后一次使用的位置 println!，在 r1 创建和最后一次使用之间，我们又尝试创建第二个可变借用 r2。</p>
+<p>对于新手来说，这个特性绝对是一大拦路虎，也是新人们谈之色变的编译器 borrow checker 特性之一，不过各行各业都一样，限制往往是出于安全的考虑，Rust 也一样。</p>
+<p>这种限制的好处就是使 Rust 在编译期就避免数据竞争，数据竞争可由以下行为造成：</p>
+<ul>
+<li>两个或更多的指针同时访问同一数据</li>
+<li>至少有一个指针被用来写入数据</li>
+<li>没有同步数据访问的机制<br>数据竞争会导致未定义行为，这种行为很可能超出我们的预期，难以在运行时追踪，并且难以诊断和修复。而 Rust 避免了这种情况的发生，因为它甚至不会编译存在数据竞争的代码！</li>
+</ul>
+<p>很多时候，大括号可以帮我们解决一些编译不通过的问题，通过手动限制变量的作用域：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">let mut s = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    let r1 = &amp;mut s;</span><br><span class="line"></span><br><span class="line">&#125; // r1 在这里离开了作用域，所以我们完全可以创建一个新的引用</span><br><span class="line"></span><br><span class="line">let r2 = &amp;mut s;</span><br></pre></td></tr></table></figure>
+<p><strong>可变引用与不可变引用不能同时存在</strong><br>下面的代码会导致一个错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">let mut s = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">let r1 = &amp;s; // 没问题</span><br><span class="line">let r2 = &amp;s; // 没问题</span><br><span class="line">let r3 = &amp;mut s; // 大问题</span><br><span class="line"></span><br><span class="line">println!(&quot;&#123;&#125;, &#123;&#125;, and &#123;&#125;&quot;, r1, r2, r3);</span><br></pre></td></tr></table></figure>
+<p>错误如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable</span><br><span class="line"> --&gt; src/main.rs:6:14</span><br><span class="line">  |</span><br><span class="line">4 |     let r1 = &amp;s; // 没问题</span><br><span class="line">  |              -- immutable borrow occurs here</span><br><span class="line">5 |     let r2 = &amp;s; // 没问题</span><br><span class="line">6 |     let r3 = &amp;mut s; // 大问题</span><br><span class="line">  |              ^^^^^^ mutable borrow occurs here</span><br><span class="line">7 |     </span><br><span class="line">8 |     println!(&quot;&#123;&#125;, &#123;&#125;, and &#123;&#125;&quot;, r1, r2, r3);</span><br><span class="line">  |                                -- immutable borrow later used here</span><br><span class="line"></span><br><span class="line">error: aborting due to 1 previous error</span><br><span class="line"></span><br><span class="line">For more information about this error, try `rustc --explain E0502`.</span><br></pre></td></tr></table></figure>
+<p>其实这个也很好理解，正在借用不可变引用的用户，肯定不希望他借用的东西，被另外一个人莫名其妙改变了。多个不可变借用被允许是因为没有人会去试图修改数据，每个人都只读这一份数据而不做修改，因此不用担心数据被污染。</p>
+<table>
+    <tr>
+        <td bgcolor=#F0F8FF>
+            注意，引用的作用域 s 从创建开始，一直持续到它最后一次使用的地方，这个跟变量的作用域有所不同，变量的作用域从创建持续到某一个花括号 }
+        </td>
+    </tr>
+</table>
+
+<p>Rust 的编译器一直在优化，早期的时候，引用的作用域跟变量作用域是一致的，这对日常使用带来了很大的困扰，你必须非常小心的去安排可变、不可变变量的借用，免得无法通过编译，例如以下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">   let mut s = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">    let r1 = &amp;s;</span><br><span class="line">    let r2 = &amp;s;</span><br><span class="line">    println!(&quot;&#123;&#125; and &#123;&#125;&quot;, r1, r2);</span><br><span class="line">    // 新编译器中，r1,r2作用域在这里结束</span><br><span class="line"></span><br><span class="line">    let r3 = &amp;mut s;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, r3);</span><br><span class="line">&#125; // 老编译器中，r1、r2、r3作用域在这里结束</span><br><span class="line">  // 新编译器中，r3作用域在这里结束</span><br></pre></td></tr></table></figure>
+<p>在老版本的编译器中（Rust 1.31 前），将会报错，因为 r1 和 r2 的作用域在花括号 } 处结束，那么 r3 的借用就会触发 <strong>无法同时借用可变和不可变</strong>的规则。<br>但是在新的编译器中，该代码将顺利通过，因为 引用作用域的结束位置从花括号变成最后一次使用的位置，因此 r1 借用和 r2 借用在 println! 后，就结束了，此时 r3 可以顺利借用到可变引用。</p>
+<h1 id="3-NULL"><a href="#3-NULL" class="headerlink" title="3.NULL"></a>3.NULL</h1><p>对于这种编译器优化行为，Rust 专门起了一个名字 —— Non-Lexical Lifetimes(NLL)，专门用于找到某个引用在作用域(})结束前就不再被使用的代码位置。</p>
+<p>虽然这种借用错误有的时候会让我们很郁闷，但是你只要想想这是 Rust 提前帮你发现了潜在的 BUG，其实就开心了，虽然减慢了开发速度，但是从长期来看，大幅减少了后续开发和运维成本。</p>
+<h1 id="4-悬垂引用-Dangling-References"><a href="#4-悬垂引用-Dangling-References" class="headerlink" title="4.悬垂引用(Dangling References)"></a>4.悬垂引用(Dangling References)</h1><p>悬垂引用也叫做悬垂指针，意思为指针指向某个值后，这个值被释放掉了，而指针仍然存在，其指向的内存可能不存在任何值或已被其它变量重新使用。在 Rust 中编译器可以确保引用永远也不会变成悬垂状态：当你获取数据的引用后，编译器可以确保数据不会在引用结束前被释放，要想释放数据，必须先停止其引用的使用。</p>
+<p>让我们尝试创建一个悬垂引用，Rust 会抛出一个编译时错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let reference_to_nothing = dangle();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn dangle() -&gt; &amp;String &#123;</span><br><span class="line">    let s = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">    &amp;s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里是错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">error[E0106]: missing lifetime specifier</span><br><span class="line"> --&gt; src/main.rs:5:16</span><br><span class="line">  |</span><br><span class="line">5 | fn dangle() -&gt; &amp;String &#123;</span><br><span class="line">  |                ^ expected named lifetime parameter</span><br><span class="line">  |</span><br><span class="line">  = help: this function&#x27;s return type contains a borrowed value, but there is no value for it to be borrowed from</span><br><span class="line">help: consider using the `&#x27;static` lifetime, but this is uncommon unless you&#x27;re returning a borrowed value from a `const` or a `static`</span><br><span class="line">  |</span><br><span class="line">5 | fn dangle() -&gt; &amp;&#x27;static String &#123;</span><br><span class="line">  |                 +++++++</span><br><span class="line">help: instead, you are more likely to want to return an owned value</span><br><span class="line">  |</span><br><span class="line">5 - fn dangle() -&gt; &amp;String &#123;</span><br><span class="line">5 + fn dangle() -&gt; String &#123;</span><br><span class="line">  |</span><br><span class="line"></span><br><span class="line">warning: unused variable: `reference_to_nothing`</span><br><span class="line"> --&gt; src/main.rs:2:9</span><br><span class="line">  |</span><br><span class="line">2 |     let reference_to_nothing = dangle();</span><br><span class="line">  |         ^^^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_reference_to_nothing`</span><br><span class="line">  |</span><br><span class="line">  = note: `#[warn(unused_variables)]` on by default</span><br><span class="line"></span><br><span class="line">error[E0515]: cannot return reference to local variable `s`</span><br><span class="line"> --&gt; src/main.rs:8:5</span><br><span class="line">  |</span><br><span class="line">8 |     &amp;s</span><br><span class="line">  |     ^^ returns a reference to data owned by the current function</span><br><span class="line"></span><br><span class="line">error: aborting due to 2 previous errors; 1 warning emitted</span><br><span class="line"></span><br><span class="line">Some errors have detailed explanations: E0106, E0515.</span><br><span class="line">For more information about an error, try `rustc --explain E0106`.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>错误信息引用了一个我们还未介绍的功能：<strong>生命周期(lifetimes)</strong>。不过，即使你不理解生命周期，也可以通过错误信息知道这段代码错误的关键信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">this function&#x27;s return type contains a borrowed value, but there is no value for it to be borrowed from.</span><br><span class="line">该函数返回了一个借用的值，但是已经找不到它所借用值的来源</span><br></pre></td></tr></table></figure>
+<p>仔细看看 dangle 代码的每一步到底发生了什么：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fn dangle() -&gt; &amp;String &#123; // dangle 返回一个字符串的引用</span><br><span class="line"></span><br><span class="line">    let s = String::from(&quot;hello&quot;); // s 是一个新字符串</span><br><span class="line"></span><br><span class="line">    &amp;s // 返回字符串 s 的引用</span><br><span class="line">&#125; // 这里 s 离开作用域并被丢弃。其内存被释放。</span><br><span class="line">  // 危险！</span><br></pre></td></tr></table></figure>
+<p>因为 s 是在 dangle 函数内创建的，当 dangle 的代码执行完毕后，s 将被释放，但是此时我们又尝试去返回它的引用。这意味着这个引用会指向一个无效的 String，这可不对！</p>
+<p>其中一个很好的解决方法是直接返回 String：<br>fn no_dangle() -&gt; String {<br>    let s &#x3D; String::from(“hello”);</p>
+<pre><code>s
+</code></pre>
+<p>}<br>这样就没有任何错误了，最终 String 的 <strong>所有权被转移给外面的调用者。</strong></p>
+<h1 id="5-切片-slice"><a href="#5-切片-slice" class="headerlink" title="5.切片(slice)"></a>5.切片(slice)</h1><ul>
+<li>字符串切片</li>
+<li>数组切片</li>
+</ul>
+<p>切片并不是 Rust 独有的概念，在 Go 语言中就非常流行，它允许你引用集合中部分连续的元素序列，而不是引用整个集合。</p>
+<p>对于字符串而言，切片就是对 String 类型中某一部分的引用，它看起来像这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let s = String::from(&quot;hello world&quot;);</span><br><span class="line"></span><br><span class="line">let hello = &amp;s[0..5];</span><br><span class="line">let world = &amp;s[6..11];</span><br></pre></td></tr></table></figure>
+<p>hello 没有引用整个 String s，而是引用了 s 的一部分内容，通过 [0..5] 的方式来指定。</p>
+<p>这就是创建切片的语法，使用方括号包括的一个序列：[开始索引..终止索引]，其中开始索引是切片中第一个元素的索引位置，而终止索引是最后一个元素后面的索引位置，也就是这是一个 右半开区间。在切片数据结构内部会保存开始的位置和切片的长度，其中长度是通过 终止索引 - 开始索引 的方式计算得来的。</p>
+<p>对于 let world &#x3D; &amp;s[6..11]; 来说，world 是一个切片，该切片的指针指向 s 的第 7 个字节(索引从 0 开始, 6 是第 7 个字节)，且该切片的长度是 5 个字节。<br><img src="/../images/slice.png"><br>在使用 Rust 的 .. range 序列语法时，如果你想从索引 0 开始，可以使用如下的方式，这两个是等效的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">let s = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">let slice = &amp;s[0..2];</span><br><span class="line">let slice = &amp;s[..2];</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>同样的，如果你的切片想要包含 String 的最后一个字节，则可以这样使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">let s = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">let len = s.len();</span><br><span class="line"></span><br><span class="line">let slice = &amp;s[4..len];</span><br><span class="line">let slice = &amp;s[4..];</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>你也可以截取完整的 String 切片：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">let s = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">let len = s.len();</span><br><span class="line"></span><br><span class="line">let slice = &amp;s[0..len];</span><br><span class="line">let slice = &amp;s[..];</span><br></pre></td></tr></table></figure>
+
+<table>
+    <tr>
+        <td bgcolor=#F0F8FF>
+            在对字符串使用切片语法时需要格外小心，切片的索引必须落在字符之间的边界位置，也就是 UTF-8 字符的边界，例如中文在 UTF-8 中占用三个字节，下面的代码就会崩溃：
+
+<pre><code>        let s = &quot;中国人&quot;;
+        let a = &amp;s[0..2];
+        println!(&quot;&#123;&#125;&quot;,a);
+        因为我们只取 s 字符串的前两个字节，但是本例中每个汉字占用三个字节，因此没有落在边界处，也就是连 中 字都取不完整，此时程序会直接崩溃退出，如果改成 &amp;s[0..3]，则可以正常通过编译。 因此，当你需要对字符串做切片索引操作时，需要格外小心这一点, 关于该如何操作 UTF-8 字符串
+    &lt;/td&gt;
+&lt;/tr&gt;
+</code></pre>
+</table>
+字符串切片的类型标识是 &str，因此我们可以这样声明一个函数，输入 String 类型，返回它的切片: fn first_word(s: &String) -> &str 。
+有了切片就可以写出这样的代码：
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello world&quot;);</span><br><span class="line"></span><br><span class="line">    let word = first_word(&amp;s);</span><br><span class="line"></span><br><span class="line">    s.clear(); // error!</span><br><span class="line"></span><br><span class="line">    println!(&quot;the first word is: &#123;&#125;&quot;, word);</span><br><span class="line">&#125;</span><br><span class="line">fn first_word(s: &amp;String) -&gt; &amp;str &#123;</span><br><span class="line">    &amp;s[..1]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译器报错如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable</span><br><span class="line"> --&gt; src/main.rs:6:5</span><br><span class="line">  |</span><br><span class="line">4 |     let word = first_word(&amp;s);</span><br><span class="line">  |                           -- immutable borrow occurs here</span><br><span class="line">5 |</span><br><span class="line">6 |     s.clear(); // error!</span><br><span class="line">  |     ^^^^^^^^^ mutable borrow occurs here</span><br><span class="line">7 |</span><br><span class="line">8 |     println!(&quot;the first word is: &#123;&#125;&quot;, word);</span><br><span class="line">  |                                       ---- immutable borrow later used here</span><br><span class="line"></span><br><span class="line">error: aborting due to 1 previous error</span><br><span class="line"></span><br><span class="line">For more information about this error, try `rustc --explain E0502`.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>回忆一下借用的规则：当我们已经有了可变借用时，就无法再拥有不可变的借用。因为 clear 需要清空改变 String，因此它需要一个可变借用（利用 VSCode 可以看到该方法的声明是 pub fn clear(&amp;mut self) ，参数是对自身的可变借用 ）；而之后的 println! 又使用了不可变借用，也就是在 s.clear() 处可变借用与不可变借用试图同时生效，因此编译无法通过。</p>
+<p>从上述代码可以看出，Rust 不仅让我们的 API 更加容易使用，而且也在编译期就消除了大量错误！</p>
+<h2 id="5-1其它切片"><a href="#5-1其它切片" class="headerlink" title="5.1其它切片"></a>5.1其它切片</h2><p>因为切片是对集合的部分引用，因此不仅仅字符串有切片，其它集合类型也有，例如数组：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">let a = [1, 2, 3, 4, 5];</span><br><span class="line"></span><br><span class="line">let slice = &amp;a[1..3];</span><br><span class="line"></span><br><span class="line">assert_eq!(slice, &amp;[2, 3]);</span><br></pre></td></tr></table></figure>
+<p>该数组切片的类型是 &amp;[i32]，数组切片和字符串切片的工作方式是一样的，例如持有一个引用指向原始数组的某个元素和长度。</p>
+<h1 id="6-生命周期"><a href="#6-生命周期" class="headerlink" title="6.生命周期"></a>6.生命周期</h1><blockquote>
+<blockquote>
+<p>dangling referencing<br>生命周期是Rust用来保证引用有效性的机制.生命周期注解允许编译器推断引用的有效范围,确保在引用仍然有效时使用它们.</p>
+</blockquote>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fn test_dangling_pointer() &#123;</span><br><span class="line">    let a = get_a();</span><br><span class="line"></span><br><span class="line">    fn get_a() -&gt; &amp;String &#123;</span><br><span class="line">        &amp;&quot;a&quot;.to_string()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="7-借用规则总结"><a href="#7-借用规则总结" class="headerlink" title="7.借用规则总结"></a>7.借用规则总结</h1><p>总的来说，借用规则如下：</p>
+<ul>
+<li>同一时刻，你只能拥有要么一个可变引用, 要么任意多个不可变引用</li>
+<li>引用必须总是有效的</li>
+</ul>
+<h1 id="8-课后习题"><a href="#8-课后习题" class="headerlink" title="8.课后习题"></a>8.课后习题</h1><p>1. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">   let x = 5;</span><br><span class="line">   // 填写空白处</span><br><span class="line">   let p = __;</span><br><span class="line"></span><br><span class="line">   println!(&quot;x 的内存地址是 &#123;:p&#125;&quot;, p); // output: 0x16fa3ac84</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let x = 5;</span><br><span class="line">    // 填写空白处</span><br><span class="line">    let p = &amp;x;</span><br><span class="line"> </span><br><span class="line">    println!(&quot;x 的内存地址是 &#123;:p&#125;&quot;, p); // output: 0x16fa3ac84</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>2. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let x = 5;</span><br><span class="line">    let y = &amp;x;</span><br><span class="line"></span><br><span class="line">    // 只能修改以下行</span><br><span class="line">    assert_eq!(5, y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let x = 5;</span><br><span class="line">    let y = &amp;x;</span><br><span class="line"></span><br><span class="line">    // 只能修改以下行</span><br><span class="line">    assert_eq!(5, *y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 修复错误</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    borrow_object(s)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn borrow_object(s: &amp;String) &#123;&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    borrow_object(&amp;s)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn borrow_object(s: &amp;String) &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 修复错误</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    push_str(s)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn push_str(s: &amp;mut String) &#123;</span><br><span class="line">    s.push_str(&quot;world&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    push_str(&amp;mut s);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn push_str(s: &amp;mut String) &#123;</span><br><span class="line">    s.push_str(&quot;world&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ref<br>ref 与 &amp; 类似，可以用来获取一个值的引用，但是它们的用法有所不同。<br>5. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    // 填写空白处，让代码工作</span><br><span class="line">    let p = __;</span><br><span class="line">    </span><br><span class="line">    p.push_str(&quot;world&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    // 填写空白处，让代码工作</span><br><span class="line">    let p = &amp;mut s;</span><br><span class="line">    </span><br><span class="line">    p.push_str(&quot;world&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>6. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let c = &#x27;中&#x27;;</span><br><span class="line"></span><br><span class="line">    let r1 = &amp;c;</span><br><span class="line">    // 填写空白处，但是不要修改其它行的代码</span><br><span class="line">    let __ r2 = c;</span><br><span class="line"></span><br><span class="line">    assert_eq!(*r1, *r2);</span><br><span class="line">    </span><br><span class="line">    // 判断两个内存地址的字符串是否相等</span><br><span class="line">    assert_eq!(get_addr(r1),get_addr(r2));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 获取传入引用的内存地址的字符串形式</span><br><span class="line">fn get_addr(r: &amp;char) -&gt; String &#123;</span><br><span class="line">    format!(&quot;&#123;:p&#125;&quot;, r)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let c = &#x27;中&#x27;;</span><br><span class="line"></span><br><span class="line">    let r1 = &amp;c;</span><br><span class="line">    // 填写空白处，但是不要修改其它行的代码</span><br><span class="line">    let ref r2 = c;</span><br><span class="line"></span><br><span class="line">    assert_eq!(*r1, *r2);</span><br><span class="line">    </span><br><span class="line">    // 判断两个内存地址的字符串是否相等</span><br><span class="line">    assert_eq!(get_addr(r1),get_addr(r2));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 获取传入引用的内存地址的字符串形式</span><br><span class="line">fn get_addr(r: &amp;char) -&gt; String &#123;</span><br><span class="line">    format!(&quot;&#123;:p&#125;&quot;, r)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>借用规则<br>7. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 移除代码某个部分，让它工作</span><br><span class="line">// 你不能移除整行的代码！</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">    let r1 = &amp;mut s;</span><br><span class="line">    let r2 = &amp;mut s;</span><br><span class="line"></span><br><span class="line">    println!(&quot;&#123;&#125;, &#123;&#125;&quot;, r1, r2);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let s = String::from(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">    let r1 =  &amp;s;</span><br><span class="line">    let r2 =  &amp;s;</span><br><span class="line"></span><br><span class="line">    println!(&quot;&#123;&#125;, &#123;&#125;&quot;, r1, r2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可变性<br>8.  🌟 错误: 从不可变对象借用可变</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    // 通过修改下面一行代码来修复错误</span><br><span class="line">    let  s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    borrow_object(&amp;mut s)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn borrow_object(s: &amp;mut String) &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    // 通过修改下面一行代码来修复错误</span><br><span class="line">    let  mut s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    borrow_object(&amp;mut s)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn borrow_object(s: &amp;mut String) &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li><p>🌟🌟 Ok: 从可变对象借用不可变 不用修改</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 下面的代码没有任何错误</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    borrow_object(&amp;s);</span><br><span class="line">    </span><br><span class="line">    s.push_str(&quot;world&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn borrow_object(s: &amp;String) &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>NLL</p>
+</li>
+<li><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">// 注释掉一行代码让它工作</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    let r1 = &amp;mut s;</span><br><span class="line">    r1.push_str(&quot;world&quot;);</span><br><span class="line">    let r2 = &amp;mut s;</span><br><span class="line">    r2.push_str(&quot;!&quot;);</span><br><span class="line">    </span><br><span class="line">    println!(&quot;&#123;&#125;&quot;,r1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    let r1 = &amp;mut s;</span><br><span class="line">    r1.push_str(&quot;world&quot;);</span><br><span class="line">    let r2 = &amp;mut s;</span><br><span class="line">    r2.push_str(&quot;!&quot;);</span><br><span class="line">    </span><br><span class="line">    //println!(&quot;&#123;&#125;&quot;,r1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    let r1 = &amp;mut s;</span><br><span class="line">    let r2 = &amp;mut s;</span><br><span class="line"></span><br><span class="line">    // 在下面增加一行代码人为制造编译错误：cannot borrow `s` as mutable more than once at a time</span><br><span class="line">    // 你不能同时使用 r1 和 r2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;hello, &quot;);</span><br><span class="line"></span><br><span class="line">    let r1 = &amp;mut s;</span><br><span class="line">    let r2 = &amp;mut s;</span><br><span class="line"></span><br><span class="line">    //print!(&quot;&#123;&#125; &#123;&#125;&quot;, r1, r2);</span><br><span class="line">    // r1.push_str(&quot;world&quot;);</span><br><span class="line">    print!(&quot;&#123;&#125; &#123;&#125; &quot;, r1, s);</span><br><span class="line">    // 在下面增加一行代码人为制造编译错误：cannot borrow `s` as mutable more than once at a time</span><br><span class="line">    // 你不能同时使用 r1 和 r2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">fn test_lifetime() &#123;</span><br><span class="line">    let large = longest(&quot;a&quot;, &quot;ab&quot;);</span><br><span class="line">    println!(&quot;large one is &#123;large&#125;&quot;);</span><br><span class="line"></span><br><span class="line">    fn longest(x:&amp;str, y:&amp;str) -&gt; &amp;str &#123;</span><br><span class="line">        if x.len() &gt; y.len() &#123;</span><br><span class="line">            x</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            y</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">fn main() &#123;</span><br><span class="line">    test_lifetime();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fn test_lifetime() &#123;</span><br><span class="line">    let large = longest(&quot;a&quot;, &quot;ab&quot;);</span><br><span class="line">    println!(&quot;large one is &#123;large&#125;&quot;);</span><br><span class="line"></span><br><span class="line">    fn longest&lt;&#x27;a&gt;(x:&amp;&#x27;a str, y:&amp;&#x27;a str) -&gt; &amp;&#x27;a str &#123;</span><br><span class="line">        if x.len() &gt; y.len() &#123;</span><br><span class="line">            x</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            y</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">fn main() &#123;</span><br><span class="line">    test_lifetime();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2024/08/21/learnRust6/" rel="next" title="Rust入门-基础 第六节 所有权">
+                <i class="fa fa-chevron-left"></i> Rust入门-基础 第六节 所有权
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%BC%95%E7%94%A8%E4%B8%8E%E8%A7%A3%E5%BC%95%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">1.引用与解引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%8F%AF%E5%8F%98%E5%BC%95%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">2.可变引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-NULL"><span class="nav-number">3.</span> <span class="nav-text">3.NULL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%82%AC%E5%9E%82%E5%BC%95%E7%94%A8-Dangling-References"><span class="nav-number">4.</span> <span class="nav-text">4.悬垂引用(Dangling References)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%88%87%E7%89%87-slice"><span class="nav-number">5.</span> <span class="nav-text">5.切片(slice)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1%E5%85%B6%E5%AE%83%E5%88%87%E7%89%87"><span class="nav-number">5.1.</span> <span class="nav-text">5.1其它切片</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">6.</span> <span class="nav-text">6.生命周期</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E5%80%9F%E7%94%A8%E8%A7%84%E5%88%99%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">7.借用规则总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-%E8%AF%BE%E5%90%8E%E4%B9%A0%E9%A2%98"><span class="nav-number">8.</span> <span class="nav-text">8.课后习题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">One Byte</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
