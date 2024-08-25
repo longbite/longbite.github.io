@@ -229,6 +229,213 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/25/learnRust8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Byte的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2024/08/25/learnRust8/" itemprop="url">Rust入门-基础 第八节 数组与切片</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-08-25T18:33:44+08:00">
+                2024-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-数组切片介绍"><a href="#1-数组切片介绍" class="headerlink" title="1.数组切片介绍"></a>1.数组切片介绍</h1><ul>
+<li>类型 [T;N] 表示N个值的数组,每个值的类型为T。数组的大小是在编译期就已确定的常量，并且是类型的一部分，不能追加新元素或者缩小数组。</li>
+<li>类型 &amp;[T] 和 &amp;mut[T] 可称为T的共享切片和T的可变切片，它们是对一系列元素的引用，这些元素是某个其他值（比如数组或向量）的一部分。可以将切片视为指向其第一个元素的指针，以及从该点开始允许访问的元素数量的计数。可变切片 &amp;mut[T] 允许读取元素和修改元素，但不能共享；共享切片&amp;[T]允许在多个读取者之间共享访问权限,但不允许修改元素。</li>
+</ul>
+<p>类型中任意一种类型的值v，表达式v.len()都会给出v中的元素数，而 v[i]引用的是v的第i个元素。v的第一个元素是v[0]，最后一个元素是v[v.len()-1]。Rust 总是会检查i是否在这个范围内，如果没在，则此表达式会出现panic。v的长度可能为0，在这种情况下，任何对其进行索引的尝试都会出现 panic。i的类型必须是usize，不能使用任何其他整型作为索引。</p>
+<ul>
+<li>数组的定义其实航是为分配一段连续的相同数据类型的内存块。</li>
+<li>数组是静态的。这意味着一旦定义和初始化，则永远不可更改它的长度。</li>
+<li>数组的元系有着相同的数据类型，每一个元素都独占者改据类型大小的内存块，也就是说。数组的内存大小等于数组的长度乘以数组的数据类型。</li>
+<li>数组中的每一个元素都按照顺序依次存储，这个顺序号既代表着元素的存储位置，也是数组元素的唯一标识。我们把这个标识称之为数组下标。注意，数姐下标从 0 开始。</li>
+<li>填充数组中的每一个元素的过程称为数组初始化。也就是说数组初始化就是为数组中的每一个元素赋值。</li>
+<li>可以更新或修改数组元素的值，但不能删除数组元素。如果要删除功能，你可以将它的值赋值为 0 或其它表示删除的值。</li>
+</ul>
+<p>这里再啰嗦一句，我们这里说的数组是 Rust 的基本类型，是固定长度的，这点与其他编程语言不同，其它编程语言的数组往往是可变长度的，与 Rust 中的动态数组 Vector 类似，希望读者大大牢记此点。</p>
+<h1 id="2-创建数组"><a href="#2-创建数组" class="headerlink" title="2.创建数组"></a>2.创建数组</h1><p>在 Rust 中，数组是这样定义的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let a = [1, 2, 3, 4, 5];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>数组语法跟 JavaScript 很像，也跟大多数编程语言很像。由于它的元素类型大小固定，且长度也是固定，因此数组 array 是存储在栈上，性能也会非常优秀。与此对应，动态数组 Vector 是存储在堆上，因此长度可以动态改变。当你不确定是使用数组还是动态数组时，那就应该使用后者，具体见动态数组 Vector。</p>
+<p>举个例子，在需要知道一年中各个月份名称的程序中，你很可能希望使用的是数组而不是动态数组。因为月份是固定的，它总是只包含 12 个元素：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let months = [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;, &quot;July&quot;,</span><br><span class="line">              &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;];</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在一些时候，还需要为数组声明类型，如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let a: [i32; 5] = [1, 2, 3, 4, 5];</span><br></pre></td></tr></table></figure>
+<p>这里，数组类型是通过方括号语法声明，i32 是元素类型，分号后面的数字 5 是数组长度，数组类型也从侧面说明了数组的元素类型要统一，长度要固定。</p>
+<p>还可以使用下面的语法初始化一个某个值重复出现 N 次的数组：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let a = [3; 5];</span><br></pre></td></tr></table></figure>
+<p>a 数组包含 5 个元素，这些元素的初始化值为 3，聪明的读者已经发现，这种语法跟数组类型的声明语法其实是保持一致的：[3; 5] 和 [类型; 长度]。</p>
+<p>在元素重复的场景，这种写法要简单的多，否则你就得疯狂敲击键盘：let a &#x3D; [3, 3, 3, 3, 3];，不过老板可能很喜欢你的这种疯狂编程的状态。</p>
+<p>访问数组元素<br>因为数组是连续存放元素的，因此可以通过索引的方式来访问存放其中的元素：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let a = [9, 8, 7, 6, 5];</span><br><span class="line"></span><br><span class="line">    let first = a[0]; // 获取a数组第一个元素</span><br><span class="line">    let second = a[1]; // 获取第二个元素</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与许多语言类似，数组的索引下标是从 0 开始的。此处，first 获取到的值是 9，second 是 8。</p>
+<h1 id="3-越界访问"><a href="#3-越界访问" class="headerlink" title="3.越界访问"></a>3.越界访问</h1><p>如果使用超出数组范围的索引访问数组元素，会怎么样？下面是一个接收用户的控制台输入，然后将其作为索引访问数组元素的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">use std::io;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let a = [1, 2, 3, 4, 5];</span><br><span class="line"></span><br><span class="line">    println!(&quot;Please enter an array index.&quot;);</span><br><span class="line"></span><br><span class="line">    let mut index = String::new();</span><br><span class="line">    // 读取控制台的输出</span><br><span class="line">    io::stdin()</span><br><span class="line">        .read_line(&amp;mut index)</span><br><span class="line">        .expect(&quot;Failed to read line&quot;);</span><br><span class="line"></span><br><span class="line">    let index: usize = index</span><br><span class="line">        .trim()</span><br><span class="line">        .parse()</span><br><span class="line">        .expect(&quot;Index entered was not a number&quot;);</span><br><span class="line"></span><br><span class="line">    let element = a[index];</span><br><span class="line"></span><br><span class="line">    println!(</span><br><span class="line">        &quot;The value of the element at index &#123;&#125; is: &#123;&#125;&quot;,</span><br><span class="line">        index, element</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 cargo run 来运行代码，因为数组只有 5 个元素，如果我们试图输入 5 去访问第 6 个元素，则会访问到不存在的数组元素，最终程序会崩溃退出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Please enter an array index.</span><br><span class="line">5</span><br><span class="line">thread &#x27;main&#x27; panicked at &#x27;index out of bounds: the len is 5 but the index is 5&#x27;, src/main.rs:19:19</span><br><span class="line">note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace</span><br></pre></td></tr></table></figure>
+<p>这就是数组访问越界，访问了数组中不存在的元素，导致 Rust 运行时错误。程序因此退出并显示错误消息，未执行最后的 println! 语句。</p>
+<p>当你尝试使用索引访问元素时，Rust 将检查你指定的索引是否小于数组长度。如果索引大于或等于数组长度，Rust 会出现 panic。这种检查只能在运行时进行，比如在上面这种情况下，编译器无法在编译期知道用户运行代码时将输入什么值。</p>
+<p>这种就是 Rust 的安全特性之一。在很多系统编程语言中，并不会检查数组越界问题，你会访问到无效的内存地址获取到一个风马牛不相及的值，最终导致在程序逻辑上出现大问题，而且这种问题会非常难以检查。</p>
+<h1 id="4-数组元素为非基础类型"><a href="#4-数组元素为非基础类型" class="headerlink" title="4.数组元素为非基础类型"></a>4.数组元素为非基础类型</h1><p>学习了上面的知识，很多朋友肯定觉得已经学会了Rust的数组类型，但现实会给我们一记重锤，实际开发中还会碰到一种情况，就是数组元素是非基本类型的，这时候大家一定会这样写。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let array = [String::from(&quot;rust is good!&quot;); 8];</span><br><span class="line"></span><br><span class="line">println!(&quot;&#123;:#?&#125;&quot;, array);</span><br></pre></td></tr></table></figure>
+<p>然后你会惊喜的得到编译错误。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">error[E0277]: the trait bound `String: std::marker::Copy` is not satisfied</span><br><span class="line"> --&gt; src/main.rs:7:18</span><br><span class="line">  |</span><br><span class="line">7 |     let array = [String::from(&quot;rust is good!&quot;); 8];</span><br><span class="line">  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::marker::Copy` is not implemented for `String`</span><br><span class="line">  |</span><br><span class="line">  = note: the `Copy` trait is required because this value will be copied for each element of the array</span><br></pre></td></tr></table></figure>
+<p>有些还没有看过特征的小伙伴，有可能不太明白这个报错，不过这个目前可以不提，我们就拿之前所学的所有权知识，就可以思考明白，前面几个例子都是Rust的基本类型，而<strong>基本类型在Rust中赋值是以Copy的形式</strong>，这时候你就懂了吧，let array&#x3D;[3;5]底层就是不断的Copy出来的，但很可惜复杂类型都没有深拷贝，只能一个个创建。</p>
+<p>接着就有小伙伴会这样写。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let array = [String::from(&quot;rust is good!&quot;),String::from(&quot;rust is good!&quot;),String::from(&quot;rust is good!&quot;)];</span><br><span class="line"></span><br><span class="line">println!(&quot;&#123;:#?&#125;&quot;, array);</span><br></pre></td></tr></table></figure>
+<p>作为一个追求极致完美的Rust开发者，怎么能容忍上面这么难看的代码存在！</p>
+<p><strong>正确的写法</strong>，应该调用std::array::from_fn</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let array: [String; 8] = std::array::from_fn(|_i| String::from(&quot;rust is good!&quot;));</span><br><span class="line"></span><br><span class="line">println!(&quot;&#123;:#?&#125;&quot;, array);</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-数组切片"><a href="#5-数组切片" class="headerlink" title="5.数组切片"></a>5.数组切片</h1><p>在之前的章节，我们有讲到 切片 这个概念，它允许你引用集合中的部分连续片段，而不是整个集合，对于数组也是，数组切片允许我们引用数组的一部分：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">let a: [i32; 5] = [1, 2, 3, 4, 5];</span><br><span class="line"></span><br><span class="line">let slice: &amp;[i32] = &amp;a[1..3];</span><br><span class="line"></span><br><span class="line">assert_eq!(slice, &amp;[2, 3]);</span><br></pre></td></tr></table></figure>
+<p>上面的数组切片 slice 的类型是&amp;[i32]，与之对比，数组的类型是[i32;5]，简单总结下切片的特点：</p>
+<ul>
+<li>切片的长度可以与数组不同，并不是固定的，而是取决于你使用时指定的起始和结束位置</li>
+<li>创建切片的代价非常小，因为切片只是针对底层数组的一个引用</li>
+<li>切片类型[T]拥有不固定的大小，而切片引用类型&amp;[T]则具有固定的大小，因为 Rust 很多时候都需要固定大小数据类型，因此&amp;[T]更有用,&amp;str字符串切片也同理</li>
+</ul>
+<h1 id="6-数组实例"><a href="#6-数组实例" class="headerlink" title="6.数组实例"></a>6.数组实例</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">fn arr() &#123;</span><br><span class="line">    let arr = [10,20,30,40];</span><br><span class="line">    println!(&quot;&#123;:?&#125;&quot;, arr);</span><br><span class="line">    arr.iter().for_each(|value:&amp;i32|println!(&quot;&#123;:?&#125;&quot;, value));</span><br><span class="line">    for value in arr.iter() &#123;</span><br><span class="line">        println!(&quot;&#123;:?&#125;&quot;, value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    arr();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    //arr();</span><br><span class="line">    let arr = [10,20,30,40];</span><br><span class="line">    let mut arr_mut = [10,20,30,40];</span><br><span class="line">    println!(&quot;before : &#123;:?&#125;&quot;, arr_mut);</span><br><span class="line">    arr_mut[0] = 0;</span><br><span class="line">    println!(&quot;after : &#123;:?&#125;&quot;, arr_mut);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">fn update(mut arr:[i32;3]) &#123;</span><br><span class="line">    println!(&quot;update before : &#123;:?&#125;&quot;, arr);</span><br><span class="line">    for i in 0..3 &#123;</span><br><span class="line">        arr[i] = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    println!(&quot;update after : &#123;:?&#125;&quot;, arr);</span><br><span class="line">&#125;</span><br><span class="line">fn main() &#123;</span><br><span class="line">    //arr();</span><br><span class="line">    let arr = [10,20,30];</span><br><span class="line">    println!(&quot;main before : &#123;:?&#125;&quot;, arr);</span><br><span class="line">    update(arr);</span><br><span class="line">    println!(&quot;main after : &#123;:?&#125;&quot;, arr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">fn update_mut(arr:&amp;mut [i32;3]) &#123;</span><br><span class="line">    println!(&quot;update before : &#123;:?&#125;&quot;, arr);</span><br><span class="line">    for i in 0..3 &#123;</span><br><span class="line">        arr[i] = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    println!(&quot;update after : &#123;:?&#125;&quot;, arr);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    //arr();</span><br><span class="line">    let mut arr = [10,20,30];</span><br><span class="line">    println!(&quot;main before : &#123;:?&#125;&quot;, arr);</span><br><span class="line">    update_mut(&amp;mut arr);</span><br><span class="line">    println!(&quot;main after : &#123;:?&#125;&quot;, arr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">  // 编译器自动推导出one的类型</span><br><span class="line">  let one             = [1, 2, 3];</span><br><span class="line">  // 显式类型标注</span><br><span class="line">  let two: [u8; 3]    = [1, 2, 3];</span><br><span class="line">  let blank1          = [0; 3];</span><br><span class="line">  let blank2: [u8; 3] = [0; 3];</span><br><span class="line"></span><br><span class="line">  // arrays是一个二维数组，其中每一个元素都是一个数组，元素类型是[u8; 3]</span><br><span class="line">  let arrays: [[u8; 3]; 4]  = [one, two, blank1, blank2];</span><br><span class="line"></span><br><span class="line">  // 借用arrays的元素用作循环中</span><br><span class="line">  for a in &amp;arrays &#123;</span><br><span class="line">    print!(&quot;&#123;:?&#125;: &quot;, a);</span><br><span class="line">    // 将a变成一个迭代器，用于循环</span><br><span class="line">    // 你也可以直接用for n in a &#123;&#125;来进行循环</span><br><span class="line">    for n in a.iter() &#123;</span><br><span class="line">      print!(&quot;\t&#123;&#125; + 10 = &#123;&#125;&quot;, n, n+10);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    let mut sum = 0;</span><br><span class="line">    // 0..a.len,是一个 Rust 的语法糖，其实就等于一个数组，元素是从0,1,2一直增加到到a.len-1</span><br><span class="line">    for i in 0..a.len() &#123;</span><br><span class="line">      sum += a[i];</span><br><span class="line">    &#125;</span><br><span class="line">    println!(&quot;\t(&#123;:?&#125; = &#123;&#125;)&quot;, a, sum);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>做个总结，数组虽然很简单，但是其实还是存在几个要注意的点：</p>
+<ul>
+<li>数组类型容易跟数组切片混淆，[T;n]描述了一个数组的类型，而[T]描述了切片的类型， 因为切片是运行期的数据结构，它的长度无法在编译期得知，因此不能用[T;n]的形式去描述<br>[u8; 3]和[u8; 4]是不同的类型，数组的长度也是类型的一部分</li>
+<li>在实际开发中，使用最多的是数组切片[T]，我们往往通过引用的方式去使用&amp;[T]，因为后者有固定的类型大小</li>
+</ul>
+<h1 id="7-切片-Slice"><a href="#7-切片-Slice" class="headerlink" title="7.切片(Slice)"></a>7.切片(Slice)</h1><p>Slice类型通常翻译为切片，它表示从某个包含多个元素的容器中取得局部数据，这个过程称为切片操作。不同语言对切片的支持有所不同，比如有些语言只允许取得连续的局部元素，而有些语言可以取得离散元素，甚至有些语言可以对hash结构进行切片操作。<br>Rust也支持Slice操作，Rust中的切片操作只允许获取一段连续的局部数据切片操作获取到的数据称为切片效据。<br>Rust常见的数据类型中，有三种类型已支持Slice操作:String类型、Array类型和Vec类型</p>
+<p>这个slice变量的类型是&amp;[i32], 通过存储第一个集合元素的引用和一个集合总长度。你可以对其他所有的集合使用这类slice。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let a = [1,2,3,4,5];</span><br><span class="line">let slice = &amp;a[1..3];</span><br><span class="line">let mut_lice = &amp;mut a[1..3];</span><br></pre></td></tr></table></figure>
+
+<h1 id="7-1-切片常用函数"><a href="#7-1-切片常用函数" class="headerlink" title="7.1 切片常用函数"></a>7.1 切片常用函数</h1><p>*len():取slice元索个数<br>*is_empty():判断slice是否为空<br>*contains():判断是否包含某个元素<br>*repeat():重复slice指定次数<br>*reverse():反转slice<br>*join():将各元素压平(flatten)并通过指定的分隔符连接起来<br>*swarp():交换两个索引处的元素，如s.swap(1,3)<br>*windows():以指定大小的窗口进行滚动选代<br>*starts_wlth():判断slice是否以某个slice开头</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">fn slice_show() &#123;</span><br><span class="line">    let arr = [1,2,3,4,5,6,7,8,9,10];</span><br><span class="line">    for i in arr.windows(3) &#123;</span><br><span class="line">        println!(&quot;windows is : &#123;:?&#125;&quot;, i); </span><br><span class="line">    &#125;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, arr.starts_with(&amp;[10]));</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, arr.starts_with(&amp;[1]));</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, arr.starts_with(&amp;[1,2,3]));</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, arr.starts_with(&amp;[1,2,3,5]));</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    slice_show();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="8-练习题"><a href="#8-练习题" class="headerlink" title="8.练习题"></a>8.练习题</h1><p>1. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    // 使用合适的类型填空</span><br><span class="line">    let arr: __ = [1, 2, 3, 4, 5];</span><br><span class="line"></span><br><span class="line">    // 修改以下代码，让它顺利运行</span><br><span class="line">    assert!(arr.len() == 4);</span><br><span class="line">&#125;</span><br><span class="line">fn main() &#123;</span><br><span class="line">    // 使用合适的类型填空</span><br><span class="line">    let arr:[i32;5] = [1, 2, 3, 4, 5];</span><br><span class="line"></span><br><span class="line">    // 修改以下代码，让它顺利运行</span><br><span class="line">    assert!(arr.len() == 4);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    // 很多时候，我们可以忽略数组的部分类型，也可以忽略全部类型，让编译器帮助我们推导</span><br><span class="line">    let arr0 = [1, 2, 3];</span><br><span class="line">    let arr: [_; 3] = [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;];</span><br><span class="line">    </span><br><span class="line">    // 填空</span><br><span class="line">    // 数组分配在栈上， `std::mem::size_of_val` 函数会返回整个数组占用的内存空间</span><br><span class="line">    // 数组中的每个 char 元素占用 4 字节的内存空间，因为在 Rust 中， char 是 Unicode 字符</span><br><span class="line">    assert!(std::mem::size_of_val(&amp;arr) == __);</span><br><span class="line">&#125;</span><br><span class="line">fn main() &#123;</span><br><span class="line">    // 很多时候，我们可以忽略数组的部分类型，也可以忽略全部类型，让编译器帮助我们推导</span><br><span class="line">    let arr0 = [1, 2, 3];</span><br><span class="line">    let arr: [_; 3] = [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;];</span><br><span class="line">    </span><br><span class="line">    // 填空</span><br><span class="line">    // 数组分配在栈上， `std::mem::size_of_val` 函数会返回整个数组占用的内存空间</span><br><span class="line">    // 数组中的每个 char 元素占用 4 字节的内存空间，因为在 Rust 中， char 是 Unicode 字符</span><br><span class="line">    assert!(std::mem::size_of_val(&amp;arr) == 12);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    // 填空</span><br><span class="line">    let list: [i32; 100] = __ ;</span><br><span class="line"></span><br><span class="line">    assert!(list[0] == 1);</span><br><span class="line">    assert!(list.len() == 100);</span><br><span class="line">&#125;</span><br><span class="line">fn main() &#123;</span><br><span class="line">    // 填空</span><br><span class="line">    let list: [i32; 100] = [1;100] ;</span><br><span class="line"></span><br><span class="line">    assert!(list[0] == 1);</span><br><span class="line">    assert!(list.len() == 100);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    // 修复错误</span><br><span class="line">    let _arr = [1, 2, &#x27;3&#x27;];</span><br><span class="line">&#125;</span><br><span class="line">fn main() &#123;</span><br><span class="line">    // 修复错误</span><br><span class="line">    let _arr = [1, 2, 3];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>5. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let arr = [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;];</span><br><span class="line">    </span><br><span class="line">    let ele = arr[1]; // 只修改此行来让代码工作</span><br><span class="line"></span><br><span class="line">    assert!(ele == &#x27;a&#x27;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let arr = [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;];</span><br><span class="line">    </span><br><span class="line">    let ele = arr[0]; // 只修改此行来让代码工作</span><br><span class="line"></span><br><span class="line">    assert!(ele == &#x27;a&#x27;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>6. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// 修复代码中的错误</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let names = [String::from(&quot;Sunfei&quot;), &quot;Sunface&quot;.to_string()];</span><br><span class="line">    </span><br><span class="line">    // `get` 返回 `Option&lt;T&gt;` 类型，因此它的使用非常安全</span><br><span class="line">    let name0 = names.get(0).unwrap();</span><br><span class="line"></span><br><span class="line">    // 但是下标索引就存在越界的风险了</span><br><span class="line">    let _name1 = &amp;names[2];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 修复代码中的错误</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let names = [String::from(&quot;Sunfei&quot;), &quot;Sunface&quot;.to_string()];</span><br><span class="line">    </span><br><span class="line">    // `get` 返回 `Option&lt;T&gt;` 类型，因此它的使用非常安全</span><br><span class="line">    let name0 = names.get(0).unwrap();</span><br><span class="line"></span><br><span class="line">    // 但是下标索引就存在越界的风险了</span><br><span class="line">    let _name1 = &amp;names[1];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/22/learnRust7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2167,7 +2374,7 @@ edition = "2021"
               
                 <a href="/archives%7C%7C%20archive">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
