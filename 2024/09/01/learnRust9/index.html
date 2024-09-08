@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.字符串字符串字面量的类型是 &amp;str， 例如 let s: &amp;str &#x3D; “hello, world” 中的 “hello, world” 的类型就是 &amp;str 1234567fn main() &#123;    let s &#x3D; String::from(&quot;hello world!&quot;);    println!(&quot;&#123;&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust入门-基础 第九节 字符串">
+<meta property="og:url" content="http://example.com/2024/09/01/learnRust9/index.html">
+<meta property="og:site_name" content="Byte的博客">
+<meta property="og:description" content="1.字符串字符串字面量的类型是 &amp;str， 例如 let s: &amp;str &#x3D; “hello, world” 中的 “hello, world” 的类型就是 &amp;str 1234567fn main() &#123;    let s &#x3D; String::from(&quot;hello world!&quot;);    println!(&quot;&#123;&amp;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-09-01T14:07:14.035Z">
+<meta property="article:modified_time" content="2024-09-08T15:51:38.353Z">
+<meta property="article:author" content="One Byte">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2024/09/01/learnRust9/"/>
+
+
+
+
+
+  <title>Rust入门-基础 第九节 字符串 | Byte的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Byte的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/01/learnRust9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Byte的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Rust入门-基础 第九节 字符串</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-01T22:07:14+08:00">
+                2024-09-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-字符串"><a href="#1-字符串" class="headerlink" title="1.字符串"></a>1.字符串</h1><p>字符串字面量的类型是 &amp;str， 例如 let s: &amp;str &#x3D; “hello, world” 中的 “hello, world” 的类型就是 &amp;str</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let s = String::from(&quot;hello world!&quot;);</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, s);</span><br><span class="line"></span><br><span class="line">    let s = &quot;Hello world!&quot;;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, s);    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="2-数组切片"><a href="#2-数组切片" class="headerlink" title="2.数组切片"></a>2.数组切片</h1><p>slice 允许你引用集合中一段连续的元素序列,而不是引用整个集合<br>slice 是一种引用，所以它没有所有权</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let a:[i32;5]   = [1,2,3,4,5];</span><br><span class="line">    </span><br><span class="line">    let s:&amp;[i32]    = &amp;a[1..3];</span><br><span class="line"></span><br><span class="line">    assert_eq!(s, &amp;[2,3]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="3-什么是字符串？"><a href="#3-什么是字符串？" class="headerlink" title="3.什么是字符串？"></a>3.什么是字符串？</h1><ul>
+<li>字符串是由字符组成的连续集合</li>
+<li>Rust中的字符是Unicode类型，因此每个字符占据4个字节内存空间，但是在字符串中不一样，字符串是UTF-8编码，也就是字符串中的字符所占的字节数是变化的（1-4）</li>
+</ul>
+<p>对于”hello 中国”这样的一个字符串来说，UTF8编码为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">h   e   l   l   o   中  国</span><br><span class="line">[104 101 108 108 111 32 228,184,173 229,155,189]</span><br></pre></td></tr></table></figure>
+
+<p>str</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let s:&amp;str = &quot;Hello, world!&quot;;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>str类型，是Rust语言提供的一个基础类型,其本质是一个字节数组[u8]<br>str 或 [8] 类型的值存放在内存某处：可能是堆，可能是栈 还可能硬编码进可执行程序。</p>
+<h1 id="4-字符串字面值"><a href="#4-字符串字面值" class="headerlink" title="4.字符串字面值"></a>4.字符串字面值</h1><p>字符串字面值来说，我们在编译时就知道其内容，最终字面值文本被直接硬编码进可执行文件<br>字符串字面量 “Hello World” 就是 st类型 它被硬编码进可执行程序的数据部分<br>既然我们已经存储了这个字符串，就需要一种方法来访问它：这就是切片引用&amp;str的意义所在</p>
+<ul>
+<li>&amp;str是一种不可变引用，所以它没有所有权</li>
+<li>str类型是硬编码进可执行文件，也无法被修改</li>
+</ul>
+<h1 id="4-1-str-vs-String"><a href="#4-1-str-vs-String" class="headerlink" title="4.1 &amp;str vs String"></a>4.1 &amp;str vs String</h1><ul>
+<li>&amp;str：这是一个字符串切片，它是固定大小的，并且不能改变</li>
+<li>String 这是一个可增长，可改变的，拥有所有权的， UTF-8编码的字符串类型，它通常用于需要改变或者增长字符串的情况。</li>
+</ul>
+<h1 id="4-2-将utf8数组转成字符串"><a href="#4-2-将utf8数组转成字符串" class="headerlink" title="4.2 将utf8数组转成字符串"></a>4.2 将utf8数组转成字符串</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">use core::str;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let b = [104,101,108,108,111,32,228,184,173,229,155,189];</span><br><span class="line">    let s = str::from_utf8(&amp;b).unwrap();</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="4-3-将字符串转成utf8数组"><a href="#4-3-将字符串转成utf8数组" class="headerlink" title="4.3 将字符串转成utf8数组"></a>4.3 将字符串转成utf8数组</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let s = &quot;hello 中国&quot;.as_bytes();</span><br><span class="line">    dbg!(&quot;&#123;&#125;&quot;, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="4-4-String-str"><a href="#4-4-String-str" class="headerlink" title="4.4 String -&gt; &amp;str"></a>4.4 String -&gt; &amp;str</h1><p>从String 类型转变为 &amp;str 是非常便捷的，而且无损的（性能无损，不会造成重写malloc或者数据移动）<br>另外，由于Rust实现了自动解引用，那么&amp;String在必要的时候可以自动转换为&amp;str，因此在很多函数中，如果接收参数是字符串的引用，通常会采用&amp;str作为入参，以获取更好的数据兼容性。</p>
+<p>字符串是UTF-8编码，因此需要保证索引的字节刚好落在字符的边界</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let s = String::from(&quot;hello,world!&quot;);</span><br><span class="line">    say_hello(&amp;s);</span><br><span class="line">    say_hello(&amp;s[..]);</span><br><span class="line">    say_hello(s.as_str());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn say_hello(s:&amp;str) &#123;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="4-5-字符串数组Vec-String"><a href="#4-5-字符串数组Vec-String" class="headerlink" title="4.5 字符串数组Vec -&gt; String"></a>4.5 字符串数组Vec<u8> -&gt; String</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let b = vec![104,101,108,108,111,32,228,184,173,229,155,189];</span><br><span class="line">    let s = String::from_utf8(b).unwrap();</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="4-6-str-String"><a href="#4-6-str-String" class="headerlink" title="4.6 &amp;str -&gt; String"></a>4.6 &amp;str -&gt; String</h1><p>从一个&amp;str获得一个String却是低效的，因为要重新malloc数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let s = String::from(&quot;hello 世界&quot;);</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="5-操作字符串"><a href="#5-操作字符串" class="headerlink" title="5. 操作字符串"></a>5. 操作字符串</h1><p>由于 String 是可变字符串，下面介绍Rust字符串的修改，添加，删除等常用方法</p>
+<h1 id="5-1-追加-Push"><a href="#5-1-追加-Push" class="headerlink" title="5.1 追加(Push)"></a>5.1 追加(Push)</h1><ul>
+<li>使用push() 方法追加字符char</li>
+<li>使用push_str()方法追加字符串字面量</li>
+<li>两个方法都是在原有的字符串上追加，并不会返回新的字符串</li>
+<li>字符串追加操作要修改原来的字符串，则该字符串必须是可变的，即字符串变量必须由mut关键字修饰</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;Hello &quot;);</span><br><span class="line"></span><br><span class="line">    s.push_str(&quot;rust&quot;);</span><br><span class="line">    println!(&quot;追加字符串 push_str() =&gt; &#123;&#125;&quot;, s);</span><br><span class="line"></span><br><span class="line">    s.push(&#x27;!&#x27;);</span><br><span class="line"></span><br><span class="line">    println!(&quot;追加字符 push() =&gt; &#123;&#125;&quot;, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-2-插入-Insert"><a href="#5-2-插入-Insert" class="headerlink" title="5.2 插入(Insert)"></a>5.2 插入(Insert)</h1><ul>
+<li>使用insert()方法插入单个字符char</li>
+<li>使用insert_str()方法插入字符串字面量</li>
+<li>这俩方法需要传入两个参数，第一个参数是字符（串）插入位置的索引，索引从0开始计数；第二个参数是要插入的字符(串)<ul>
+<li>如果越界则会发生错误</li>
+<li>如果参数所给的位置不是合法的字符边界，也会发生错误</li>
+</ul>
+</li>
+<li>由于字符串插入操作要修改原来的字符串，则该字符串必须是可变的，即字符串变量必须由mut关键字修饰</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;Hello rust！中文&quot;);</span><br><span class="line"></span><br><span class="line">    s.insert(5,&#x27;,&#x27;);</span><br><span class="line">    println!(&quot;插入字符 insert() =&gt; &#123;&#125;&quot;, s);</span><br><span class="line"></span><br><span class="line">    //报错</span><br><span class="line">    //s.insert(13, &#x27;,&#x27;);</span><br><span class="line"></span><br><span class="line">    s.insert_str(6, &quot;I like&quot;);</span><br><span class="line"></span><br><span class="line">    println!(&quot;插入字符串 insert_str() =&gt; &#123;&#125;&quot;, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-3-replace"><a href="#5-3-replace" class="headerlink" title="5.3 replace"></a>5.3 replace</h1><ul>
+<li>replace()方法接收两个参数，第一个参数是要被替换的字符串，第二个参数是新的字符串</li>
+<li>该方法会替换所有匹配到的字符串</li>
+<li>该方法是返回的一个新的字符串，而不是操作原来的字符串<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let s = String::from(&quot;I like rust.Learning rust is my faviorte!&quot;);</span><br><span class="line">    let new_string_replace = s.replace(&quot;rust&quot;, &quot;Rust&quot;);</span><br><span class="line"></span><br><span class="line">    dbg!(new_string_replace);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="5-4-replacen"><a href="#5-4-replacen" class="headerlink" title="5.4 replacen"></a>5.4 replacen</h1><ul>
+<li>方法接收三个参数。前两个参数与replace()方法一样，第三个参数则表示替换的个数</li>
+<li>该方法是返回一个新的字符串，而不是操作原来的字符串<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let s = String::from(&quot;I like rust.Learning rust is my faviorte!&quot;);</span><br><span class="line">    let new_string_replace = s.replacen(&quot;rust&quot;, &quot;Rust&quot;, 1);</span><br><span class="line"></span><br><span class="line">    dbg!(new_string_replace);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="5-5-replace-range"><a href="#5-5-replace-range" class="headerlink" title="5.5 replace_range"></a>5.5 replace_range</h1><ul>
+<li>replace_range 接收两个参数，第一个参数是要替换字符串的范围(Range),第二个参数是新的字符串</li>
+<li>该方法是直接操作原来的字符串，不会返回新的字符串。该方法需要使用mut关键字修饰。</li>
+<li>如果range的范围大于&#x2F;小于新字符串长度会怎样？<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;I like rust!&quot;);</span><br><span class="line">    s.replace_range(7..8, &quot;R&quot;);</span><br><span class="line">    dbg!(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;I like rust!&quot;);</span><br><span class="line">    s.replace_range(7..=10, &quot;Rust1&quot;);</span><br><span class="line">    dbg!(s);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;I like rust!&quot;);</span><br><span class="line">    s.replace_range(6..7, &quot;Rust&quot;);</span><br><span class="line">    dbg!(s);</span><br><span class="line">&#125;</span><br><span class="line">   Compiling world_hello v0.1.0 (D:\rust\world_hello)</span><br><span class="line">    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.23s</span><br><span class="line">     Running `target\debug\world_hello.exe`</span><br><span class="line">[src/main.rs:4:5] s = &quot;I likeRustrust!&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;I like rust!&quot;);</span><br><span class="line">    s.replace_range(6..=10, &quot;R&quot;);</span><br><span class="line">    dbg!(s);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">   Compiling world_hello v0.1.0 (D:\rust\world_hello)</span><br><span class="line">    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.21s</span><br><span class="line">     Running `target\debug\world_hello.exe`</span><br><span class="line">[src/main.rs:4:5] s = &quot;I likeR!&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="5-6-pop"><a href="#5-6-pop" class="headerlink" title="5.6 pop"></a>5.6 pop</h1><ul>
+<li>删除并返回字符串的最后一个字符</li>
+<li>其返回值是一个Option类型，如果字符串为空，则返回None</li>
+<li>该方法是直接操作原来的字符串<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;中文!&quot;);</span><br><span class="line"></span><br><span class="line">    let p1 = s.pop();</span><br><span class="line">    let p2 = s.pop();</span><br><span class="line">    dbg!(p1);</span><br><span class="line">    dbg!(p2);</span><br><span class="line">    dbg!(&amp;s);</span><br><span class="line"></span><br><span class="line">    let p3  = s.pop();</span><br><span class="line">    let p4  = s.pop();</span><br><span class="line">    dbg!(p3);</span><br><span class="line">    dbg!(p4);</span><br><span class="line">    //dbg!(&amp;string_pop);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="5-7-remove"><a href="#5-7-remove" class="headerlink" title="5.7 remove"></a>5.7 remove</h1><ul>
+<li>该方法是直接操作原来的字符串</li>
+<li>其返回值是删除位置的字符串</li>
+<li>只接收一个参数，表示该字符起始索引位置</li>
+<li>方法是按照字节来处理字符串的，如果参数所给的位置不是合法的字符边界，则会发生错误</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;测试remove方法&quot;);</span><br><span class="line">    println!(</span><br><span class="line">        &quot;string_remove 占 &#123;&#125; 个字节&quot;,</span><br><span class="line">        std::mem::size_of_val(s.as_str())</span><br><span class="line">    );</span><br><span class="line">    s.remove(0);</span><br><span class="line"></span><br><span class="line">    dbg!(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-8-truncate"><a href="#5-8-truncate" class="headerlink" title="5.8 truncate"></a>5.8 truncate</h1><ul>
+<li>删除字符串中从指定位置开始到结尾的全部字符</li>
+<li>方法是按照字节来处理字符串的，如果参数所给的位置不是合法的字符边界，则会发生错误</li>
+<li>该方法是直接操作原来的字符串<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;测试truncate&quot;);</span><br><span class="line">    s.truncate(3);</span><br><span class="line">    dbg!(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="5-9-clear"><a href="#5-9-clear" class="headerlink" title="5.9 clear"></a>5.9 clear</h1><ul>
+<li>清空字符串</li>
+<li>该方法是直接操作原来的字符串<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut s = String::from(&quot;string clear&quot;);</span><br><span class="line"></span><br><span class="line">    s.clear();</span><br><span class="line"></span><br><span class="line">    dbg!(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="5-10-使用-或者-连接字符串"><a href="#5-10-使用-或者-连接字符串" class="headerlink" title="5.10 使用+或者+&#x3D;连接字符串"></a>5.10 使用+或者+&#x3D;连接字符串</h1><ul>
+<li>这里add()方法的第二个参数必须为字符串的切片引用(Slice)类型</li>
+<li>+ 这里是返回一个新的字符串，所以变量声明可以不需要mut关键字修饰<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let s = String::from(&quot;hello &quot;);</span><br><span class="line">    let string_rust = String::from(&quot;rust&quot;);</span><br><span class="line"></span><br><span class="line">    let result = s + &amp;string_rust;//string_rust会自动解引用为&amp;str</span><br><span class="line">    let mut result1 = result + &quot;!&quot;;</span><br><span class="line"></span><br><span class="line">    result1 += &quot;!!!&quot;;</span><br><span class="line"></span><br><span class="line">    println!(&quot;连接字符串 + =》 &#123;&#125;&quot;, result1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">use std::ops::Add;</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let s = String::from(&quot;hello &quot;);</span><br><span class="line">    let string_rust = String::from(&quot;rust&quot;);</span><br><span class="line"></span><br><span class="line">    let result = s.add(&amp;string_rust);//</span><br><span class="line"></span><br><span class="line">    println!(&quot;连接字符串 + =》 &#123;&#125;&quot;, result);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-11-使用format-连接字符串"><a href="#5-11-使用format-连接字符串" class="headerlink" title="5.11 使用format! 连接字符串"></a>5.11 使用format! 连接字符串</h1><ul>
+<li>format!的用法与print!用法类似<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let s1 = &quot;hello&quot;;</span><br><span class="line">    let s2 = String::from(&quot;rust&quot;);</span><br><span class="line">    let s = format!(&quot;&#123;&#125; &#123;&#125;&quot;, s1, s2);</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="6-字符串转义"><a href="#6-字符串转义" class="headerlink" title="6 字符串转义"></a>6 字符串转义</h1><p>我们可以通过转义的方式 \ 输出ASCII和Unicode字符</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    //通过 \ + 字符的十六进制表示 转义输出一个字符</span><br><span class="line">    let byte_escape = &quot;I&#x27;m writing \x52\x75\x73\x74&quot;;</span><br><span class="line"></span><br><span class="line">    println!(&quot;What are you doing\x3F (\\x3f means ?) &#123;&#125;&quot;, byte_escape);</span><br><span class="line"></span><br><span class="line">    //\u可以输出一个unicoe字符</span><br><span class="line">    let unicode_codepoint = &quot;\u&#123;211D&#125;&quot;;</span><br><span class="line">    let character_name = &quot;\&quot;DOUBLE-STRUCK CAPITAL R\&quot;&quot;;</span><br><span class="line"></span><br><span class="line">    println!(</span><br><span class="line">        &quot;Unicode character &#123;&#125; (U+211D) is called &#123;&#125;&quot;,</span><br><span class="line">        unicode_codepoint, character_name</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    //换行了也会保持之前的字符串格式</span><br><span class="line">    //使用\忽略换行符</span><br><span class="line">    let long_string = &quot;String literals </span><br><span class="line">                              can span multiple lines.</span><br><span class="line">                              The linebreak and  indentation here -&gt;\</span><br><span class="line">                              &lt;- can be escaped too!&quot;;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, long_string);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="7-原样输出"><a href="#7-原样输出" class="headerlink" title="7 原样输出"></a>7 原样输出</h1><p>当然，在某些情况下，可能你会希望保持字符串的原样，不要转义</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line"></span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, &quot;hello \x52\x75\x73\x74&quot;);</span><br><span class="line"></span><br><span class="line">    //通过 \ + 字符的十六进制表示 转义输出一个字符</span><br><span class="line">    let raw_str = r&quot;Escapes don&#x27;t work here:\x3F \u&#123;211D&#125;&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, raw_str);  </span><br><span class="line"></span><br><span class="line">    //如果字符串包含双引号，可以在开头和结尾加 #</span><br><span class="line">    let quates = r#&quot;And then I said:&quot;There is no escape!&quot;&quot;#;</span><br><span class="line"></span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, quates); </span><br><span class="line"></span><br><span class="line">    //如果还是有歧义 可以接续添加 没有限制</span><br><span class="line"></span><br><span class="line">    let longer_delimiter = r###&quot;A string with &quot;# in it. And even &quot;##!&quot;###;</span><br><span class="line"></span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, longer_delimiter); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2024/08/25/learnRust8/" rel="next" title="Rust入门-基础 第八节 数组与切片">
+                <i class="fa fa-chevron-left"></i> Rust入门-基础 第八节 数组与切片
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.</span> <span class="nav-text">1.字符串</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%95%B0%E7%BB%84%E5%88%87%E7%89%87"><span class="nav-number">2.</span> <span class="nav-text">2.数组切片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">3.什么是字符串？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E9%9D%A2%E5%80%BC"><span class="nav-number">4.</span> <span class="nav-text">4.字符串字面值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-1-str-vs-String"><span class="nav-number">5.</span> <span class="nav-text">4.1 &amp;str vs String</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-2-%E5%B0%86utf8%E6%95%B0%E7%BB%84%E8%BD%AC%E6%88%90%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">6.</span> <span class="nav-text">4.2 将utf8数组转成字符串</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-3-%E5%B0%86%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%88%90utf8%E6%95%B0%E7%BB%84"><span class="nav-number">7.</span> <span class="nav-text">4.3 将字符串转成utf8数组</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-4-String-str"><span class="nav-number">8.</span> <span class="nav-text">4.4 String -&gt; &amp;str</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-5-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84Vec-String"><span class="nav-number">9.</span> <span class="nav-text">4.5 字符串数组Vec -&gt; String</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-6-str-String"><span class="nav-number">10.</span> <span class="nav-text">4.6 &amp;str -&gt; String</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E6%93%8D%E4%BD%9C%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">11.</span> <span class="nav-text">5. 操作字符串</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-1-%E8%BF%BD%E5%8A%A0-Push"><span class="nav-number">12.</span> <span class="nav-text">5.1 追加(Push)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-2-%E6%8F%92%E5%85%A5-Insert"><span class="nav-number">13.</span> <span class="nav-text">5.2 插入(Insert)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-3-replace"><span class="nav-number">14.</span> <span class="nav-text">5.3 replace</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-4-replacen"><span class="nav-number">15.</span> <span class="nav-text">5.4 replacen</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-5-replace-range"><span class="nav-number">16.</span> <span class="nav-text">5.5 replace_range</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-6-pop"><span class="nav-number">17.</span> <span class="nav-text">5.6 pop</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-7-remove"><span class="nav-number">18.</span> <span class="nav-text">5.7 remove</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-8-truncate"><span class="nav-number">19.</span> <span class="nav-text">5.8 truncate</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-9-clear"><span class="nav-number">20.</span> <span class="nav-text">5.9 clear</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-10-%E4%BD%BF%E7%94%A8-%E6%88%96%E8%80%85-%E8%BF%9E%E6%8E%A5%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">21.</span> <span class="nav-text">5.10 使用+或者+&#x3D;连接字符串</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-11-%E4%BD%BF%E7%94%A8format-%E8%BF%9E%E6%8E%A5%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">22.</span> <span class="nav-text">5.11 使用format! 连接字符串</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E4%B9%89"><span class="nav-number">23.</span> <span class="nav-text">6 字符串转义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E5%8E%9F%E6%A0%B7%E8%BE%93%E5%87%BA"><span class="nav-number">24.</span> <span class="nav-text">7 原样输出</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">One Byte</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
