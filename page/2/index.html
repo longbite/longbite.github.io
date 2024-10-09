@@ -229,6 +229,174 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/13/learnRust3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Byte的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2024/08/13/learnRust3/" itemprop="url">Rust入门-基础 第三节 Rust - 函数</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-08-13T23:49:28+08:00">
+                2024-08-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="函数组成"><a href="#函数组成" class="headerlink" title="函数组成"></a>函数组成</h1><ul>
+<li>声朗函数的关键字 fn</li>
+<li>函数名 add()</li>
+<li>参数i和j和参数类型 i32</li>
+<li>返同值类型 i32</li>
+<li>函数体i+j</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fn add(i:i32,j:i32)-&gt; i32 &#123;</span><br><span class="line">    i + j</span><br><span class="line">&#125;</span><br><span class="line">fn main()&#123;</span><br><span class="line">    let a = 1;</span><br><span class="line">    let b = 2;</span><br><span class="line">    let c = add(2, b);</span><br><span class="line">    printin!(&quot;&#123;&#125;&quot;,c);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该函数如此简单，但是又是如此的五脏俱全，声明函数的关键字 fn ,函数名 add()，参数 i 和 j，参数类型和返回值类型都是 i32，总之一切那么的普通，但是又那么的自信，直到你看到了下面这张图：<br><img src="/../images/function.png"><br>当你看懂了这张图，其实就等于差不多完成了函数章节的学习，但是这么短的章节显然对不起读者老爷们的厚爱，所以我们来展开下。</p>
+<h1 id="函数要点"><a href="#函数要点" class="headerlink" title="函数要点"></a>函数要点</h1><ul>
+<li>开头是字符，后面是数字，下划线，字母</li>
+<li>开头是下划线，后面是数字，下划线，字母，不能仅有下划线</li>
+<li>通数名和变量名使用蛇形命名法(snakecase)，例如fn add_two() &#x3D;&gt; {}</li>
+</ul>
+<h1 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h1><p>Rust 是强类型语言，因此需要你为每一个的数参数都标识出它的具体类型<br>注意:是每一个⚠️</p>
+<h1 id="函数返回"><a href="#函数返回" class="headerlink" title="函数返回"></a>函数返回</h1><p>函数的返日值裁是函数体最后一条表达式的返回值，也可以使用return 提前返回想要完全理解这句话需要掌握**语句(statement)和表达式(expression)””的概念初学者裁记住函数的两种形态就行了</p>
+<ul>
+<li>return + 分号</li>
+<li>没有return + 没有分号</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn add(i:i32, j:i32)-&gt; i32 &#123;</span><br><span class="line">    i + j</span><br><span class="line">&#125;</span><br><span class="line">fn add(i:i32, j:i32)-&gt; i32 &#123;</span><br><span class="line">    return i + j;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="Rust-中的特殊返回类型"><a href="#Rust-中的特殊返回类型" class="headerlink" title="Rust 中的特殊返回类型"></a>Rust 中的特殊返回类型</h1><h2 id="无返回值"><a href="#无返回值" class="headerlink" title="无返回值()"></a>无返回值()</h2><p>如果一个的数没有返回值，那么就返回()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn print(i: i32)&#123;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, i);</span><br><span class="line">&#125;</span><br><span class="line">fn print(i:i32) -&gt;() &#123;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于 Rust 新手来说，有些返回类型很难理解，而且如果你想通过百度或者谷歌去搜索，都不好查询，因为这些符号太常见了，根本难以精确搜索到。</p>
+<p>例如单元类型 ()，是一个零长度的元组。它没啥作用，但是可以用来表达一个函数没有返回值：</p>
+<p>函数没有返回值，那么返回一个 ()<br>通过 ; 结尾的语句返回一个 ()<br>例如下面的 report 函数会隐式返回一个 ()：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use std::fmt::Debug;</span><br><span class="line"></span><br><span class="line">fn report&lt;T: Debug&gt;(item: T) &#123;</span><br><span class="line">  println!(&quot;&#123;:?&#125;&quot;, item);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与上面的函数返回值相同，但是下面的函数显式的返回了 ()：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn clear(text: &amp;mut String) -&gt; () &#123;</span><br><span class="line">  *text = String::from(&quot;&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在实际编程中，你会经常在错误提示中看到该 () 的身影出没，假如你的函数需要返回一个 u32 值，但是如果你不幸的以 表达式; 的语句形式作为函数的最后一行代码，就会报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn add(x:u32,y:u32) -&gt; u32 &#123;</span><br><span class="line">    x + y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>错误如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">error[E0308]: mismatched types // 类型不匹配</span><br><span class="line"> --&gt; src/main.rs:6:24</span><br><span class="line">  |</span><br><span class="line">6 | fn add(x:u32,y:u32) -&gt; u32 &#123;</span><br><span class="line">  |    ---                 ^^^ expected `u32`, found `()` // 期望返回u32,却返回()</span><br><span class="line">  |    |</span><br><span class="line">  |    implicitly returns `()` as its body has no tail or `return` expression</span><br><span class="line">7 |     x + y;</span><br><span class="line">  |          - help: consider removing this semicolon</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>还记得我们在语句与表达式中讲过的吗？只有表达式能返回值，而 ; 结尾的是语句，在 Rust 中，一定要严格区分表达式和语句的区别，这个在其它语言中往往是被忽视的点。</p>
+<h1 id="永不返回的发散函数"><a href="#永不返回的发散函数" class="headerlink" title="永不返回的发散函数 !"></a>永不返回的发散函数 !</h1><p>当用 ! 作函数返回类型的时候，表示该函数永不返回( diverge function )，特别的，这种语法往往用做会导致程序崩溃的函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn dead_end() -&gt; ! &#123;</span><br><span class="line">  panic!(&quot;你已经到了穷途末路，崩溃吧！&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面的函数创建了一个无限循环，该循环永不跳出，因此函数也永不返回：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fn forever() -&gt; ! &#123;</span><br><span class="line">  loop &#123;</span><br><span class="line">    //...</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="练习题"><a href="#练习题" class="headerlink" title="练习题"></a>练习题</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    // 不要修改下面两行代码!</span><br><span class="line">    let (x, y) = (1, 2);</span><br><span class="line">    let s = sum(x, y);</span><br><span class="line">    print(s);</span><br><span class="line">    assert_eq!(s, 3);</span><br><span class="line">&#125;</span><br><span class="line">fn print(i: i32)&#123;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, i);</span><br><span class="line">&#125;</span><br><span class="line">fn sum(x:i32, y: i32) -&gt; i32 &#123;</span><br><span class="line">    return x + y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    print();</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> // 使用另一个类型来替代 i32</span><br><span class="line"> fn print() -&gt; () &#123;</span><br><span class="line">    println!(&quot;hello,world&quot;);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    never_return();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn never_return() -&gt; ! &#123;</span><br><span class="line">    // 实现这个函数，不要修改函数签名!</span><br><span class="line">    // panic!(&quot;error&quot;);</span><br><span class="line">    loop &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    get_option(1);</span><br><span class="line">    println!(&quot;Success!&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fn get_option(tp: u8) -&gt; Option&lt;i32&gt; &#123;</span><br><span class="line">    match tp &#123;</span><br><span class="line">        1 =&gt; &#123;</span><br><span class="line">            // TODO</span><br><span class="line">        &#125;</span><br><span class="line">        _ =&gt; &#123;</span><br><span class="line">            // TODO</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    // 这里与其返回一个 None，不如使用发散函数替代</span><br><span class="line">    never_return_fn()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 使用三种方法实现以下发散函数</span><br><span class="line">fn never_return_fn() -&gt; ! &#123;</span><br><span class="line">    // panic!(&quot;error&quot;);</span><br><span class="line">    //todo!()</span><br><span class="line">    loop &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    // 填空</span><br><span class="line">    let b: bool = false;</span><br><span class="line"></span><br><span class="line">    let _v: i32 = match b &#123;</span><br><span class="line">        true =&gt; 1,</span><br><span class="line">        // 发散函数也可以用于 `match` 表达式，用于替代任何类型的值</span><br><span class="line">        false =&gt; &#123;</span><br><span class="line">            println!(&quot;Success!&quot;);</span><br><span class="line">            panic!(&quot;we have no value for `false`, but we can panic&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    println!(&quot;Exercise Failed if printing out this line!&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/07/learnRust2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -731,7 +899,7 @@ edition = "2021"
               
                 <a href="/archives%7C%7C%20archive">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

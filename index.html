@@ -229,6 +229,292 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/07/learnRust12/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Byte的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2024/10/07/learnRust12/" itemprop="url">Rust入门-基础 第十二节 结构体</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-07T21:49:44+08:00">
+                2024-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>结构体跟之前讲过的元组有些相像：都是由多种类型组合而成。但是与元组不同的是，结构体可以为内部的每个字段起一个富有含义的名称。因此结构体更加灵活更加强大，你无需依赖这些字段的顺序来访问和解析它们。</p>
+<h1 id="1-结构体语法"><a href="#1-结构体语法" class="headerlink" title="1.结构体语法"></a>1.结构体语法</h1><h1 id="2-定义结构体"><a href="#2-定义结构体" class="headerlink" title="2 定义结构体"></a>2 定义结构体</h1><p>一个结构体由几部分组成：</p>
+<ul>
+<li>通过关键字 struct 定义</li>
+<li>一个清晰明确的结构体 名称</li>
+<li>几个有名字的结构体 字段</li>
+</ul>
+<p>例如, 以下结构体定义了某网站的用户：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct User &#123;</span><br><span class="line">    active: bool,</span><br><span class="line">    username: String,</span><br><span class="line">    email: String,</span><br><span class="line">    sign_in_count: u64,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该结构体名称是 User，拥有 4 个字段，且每个字段都有对应的字段名及类型声明，例如 username 代表了用户名，是一个可变的 String 类型。</p>
+<h1 id="3-创建结构体实例"><a href="#3-创建结构体实例" class="headerlink" title="3 创建结构体实例"></a>3 创建结构体实例</h1><p>为了使用上述结构体，我们需要创建 User 结构体的实例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">let user1 = User &#123;</span><br><span class="line">    email: String::from(&quot;someone@example.com&quot;),</span><br><span class="line">    username: String::from(&quot;someusername123&quot;),</span><br><span class="line">    active: true,</span><br><span class="line">    sign_in_count: 1,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>有几点值得注意:</p>
+<ol>
+<li>初始化实例时，每个字段都需要进行初始化</li>
+<li>初始化时的字段顺序不需要和结构体定义时的顺序一致</li>
+</ol>
+<h1 id="4-访问结构体字段"><a href="#4-访问结构体字段" class="headerlink" title="4 访问结构体字段"></a>4 访问结构体字段</h1><p>通过 . 操作符即可访问结构体实例内部的字段值，也可以修改它们：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">let mut user1 = User &#123;</span><br><span class="line">    email: String::from(&quot;someone@example.com&quot;),</span><br><span class="line">    username: String::from(&quot;someusername123&quot;),</span><br><span class="line">    active: true,</span><br><span class="line">    sign_in_count: 1,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">user1.email = String::from(&quot;anotheremail@example.com&quot;);</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，必须要将结构体实例声明为可变的，才能修改其中的字段，Rust 不支持将某个结构体某个字段标记为可变。</p>
+<h1 id="5-简化结构体创建"><a href="#5-简化结构体创建" class="headerlink" title="5 简化结构体创建"></a>5 简化结构体创建</h1><p>下面的函数类似一个构建函数，返回了 User 结构体的实例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fn build_user(email: String, username: String) -&gt; User &#123;</span><br><span class="line">    User &#123;</span><br><span class="line">        email: email,</span><br><span class="line">        username: username,</span><br><span class="line">        active: true,</span><br><span class="line">        sign_in_count: 1,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它接收两个字符串参数： email 和 username，然后使用它们来创建一个 User 结构体，并且返回。可以注意到这两行： email: email 和 username: username，非常的扎眼，因为实在有些啰嗦，如果你从 TypeScript 过来，肯定会鄙视 Rust 一番，不过好在，它也不是无可救药：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fn build_user(email: String, username: String) -&gt; User &#123;</span><br><span class="line">    User &#123;</span><br><span class="line">        email,</span><br><span class="line">        username,</span><br><span class="line">        active: true,</span><br><span class="line">        sign_in_count: 1,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上所示，当函数参数和结构体字段同名时，可以直接使用缩略的方式进行初始化，跟 TypeScript 中一模一样。</p>
+<h1 id="6-结构体更新语法"><a href="#6-结构体更新语法" class="headerlink" title="6 结构体更新语法"></a>6 结构体更新语法</h1><p>在实际场景中，有一种情况很常见：根据已有的结构体实例，创建新的结构体实例，例如根据已有的 user1 实例来构建 user2：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">let user2 = User &#123;</span><br><span class="line">      active: user1.active,</span><br><span class="line">      username: user1.username,</span><br><span class="line">      email: String::from(&quot;another@example.com&quot;),</span><br><span class="line">      sign_in_count: user1.sign_in_count,</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<p>老话重提，如果你从 TypeScript 过来，肯定觉得啰嗦爆了：竟然手动把 user1 的三个字段逐个赋值给 user2，好在 Rust 为我们提供了 结构体更新语法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let user2 = User &#123;</span><br><span class="line">      email: String::from(&quot;another@example.com&quot;),</span><br><span class="line">      ..user1</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<p>因为 user2 仅仅在 email 上与 user1 不同，因此我们只需要对 email 进行赋值，剩下的通过结构体更新语法 ..user1 即可完成。</p>
+<p>.. 语法表明凡是我们没有显式声明的字段，全部从 user1 中自动获取。需要注意的是 ..user1 必须在结构体的尾部使用。</p>
+<table>
+    <td bgcolor=#F0F8FF>
+        结构体更新语法跟赋值语句 = 非常相像，因此在上面代码中，user1 的部分字段所有权被转移到 user2 中：username 字段发生了所有权转移，作为结果，user1 无法再被使用。
+
+<pre><code>    聪明的读者肯定要发问了：明明有三个字段进行了自动赋值，为何只有 username 发生了所有权转移？
+
+    仔细回想一下所有权那一节的内容，我们提到了 Copy 特征：实现了 Copy 特征的类型无需所有权转移，可以直接在赋值时进行 数据拷贝，其中 bool 和 u64 类型就实现了 Copy 特征，因此 active 和 sign_in_count 字段在赋值给 user2 时，仅仅发生了拷贝，而不是所有权转移。
+
+    值得注意的是：username 所有权被转移给了 user2，导致了 user1 无法再被使用，但是并不代表 user1 内部的其它字段不能被继续使用，例如：
+&lt;/td&gt;
+</code></pre>
+</table>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">let user1 = User &#123;</span><br><span class="line">    email: String::from(&quot;someone@example.com&quot;),</span><br><span class="line">    username: String::from(&quot;someusername123&quot;),</span><br><span class="line">    active: true,</span><br><span class="line">    sign_in_count: 1,</span><br><span class="line">&#125;;</span><br><span class="line">let user2 = User &#123;</span><br><span class="line">    active: user1.active,</span><br><span class="line">    username: user1.username,</span><br><span class="line">    email: String::from(&quot;another@example.com&quot;),</span><br><span class="line">    sign_in_count: user1.sign_in_count,</span><br><span class="line">&#125;;</span><br><span class="line">println!(&quot;&#123;&#125;&quot;, user1.active);</span><br><span class="line">// 下面这行会报错</span><br><span class="line">println!(&quot;&#123;:?&#125;&quot;, user1);</span><br></pre></td></tr></table></figure>
+
+<h1 id="7-结构体的内存排列"><a href="#7-结构体的内存排列" class="headerlink" title="7 结构体的内存排列"></a>7 结构体的内存排列</h1><p>先来看以下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#[derive(Debug)]</span><br><span class="line"> struct File &#123;</span><br><span class="line">   name: String,</span><br><span class="line">   data: Vec&lt;u8&gt;,</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> fn main() &#123;</span><br><span class="line">   let f1 = File &#123;</span><br><span class="line">     name: String::from(&quot;f1.txt&quot;),</span><br><span class="line">     data: Vec::new(),</span><br><span class="line">   &#125;;</span><br><span class="line"></span><br><span class="line">   let f1_name = &amp;f1.name;</span><br><span class="line">   let f1_length = &amp;f1.data.len();</span><br><span class="line"></span><br><span class="line">   println!(&quot;&#123;:?&#125;&quot;, f1);</span><br><span class="line">   println!(&quot;&#123;&#125; is &#123;&#125; bytes long&quot;, f1_name, f1_length);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>上面定义的 File 结构体在内存中的排列如下图所示：<br><img src="/../images/struct-mem.png"><br>从图中可以清晰地看出 File 结构体两个字段 name 和 data 分别拥有底层两个 [u8] 数组的所有权(String 类型的底层也是 [u8] 数组)，通过 ptr 指针指向底层数组的内存地址，这里你可以把 ptr 指针理解为 Rust 中的引用类型。</p>
+<p>该图片也侧面印证了：<em>把结构体中具有所有权的字段转移出去后，将无法再访问该字段，但是可以正常访问其它的字段。</em></p>
+<h1 id="8-元组结构体-Tuple-Struct"><a href="#8-元组结构体-Tuple-Struct" class="headerlink" title="8 元组结构体(Tuple Struct)"></a>8 元组结构体(Tuple Struct)</h1><p>结构体必须要有名称，但是结构体的字段可以没有名称，这种结构体长得很像元组，因此被称为元组结构体，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct Color(i32, i32, i32);</span><br><span class="line">struct Point(i32, i32, i32);</span><br><span class="line"></span><br><span class="line">let black = Color(0, 0, 0);</span><br><span class="line">let origin = Point(0, 0, 0);</span><br></pre></td></tr></table></figure>
+<p>元组结构体在你希望有一个整体名称，但是又不关心里面字段的名称时将非常有用。例如上面的 Point 元组结构体，众所周知 3D 点是 (x, y, z) 形式的坐标点，因此我们无需再为内部的字段逐一命名为：x, y, z。</p>
+<h1 id="9-单元结构体-Unit-like-Struct"><a href="#9-单元结构体-Unit-like-Struct" class="headerlink" title="9 单元结构体(Unit-like Struct)"></a>9 单元结构体(Unit-like Struct)</h1><p>还记得之前讲过的基本没啥用的单元类型吧？单元结构体就跟它很像，没有任何字段和属性，但是好在，它还挺有用。</p>
+<p>如果你定义一个类型，但是不关心该类型的内容, 只关心它的行为时，就可以使用 单元结构体：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">struct AlwaysEqual;</span><br><span class="line"></span><br><span class="line">let subject = AlwaysEqual;</span><br><span class="line"></span><br><span class="line">// 我们不关心 AlwaysEqual 的字段数据，只关心它的行为，因此将它声明为单元结构体，然后再为它实现某个特征</span><br><span class="line">impl SomeTrait for AlwaysEqual &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="10-结构体数据的所有权"><a href="#10-结构体数据的所有权" class="headerlink" title="10 结构体数据的所有权"></a>10 结构体数据的所有权</h1><p>在之前的 User 结构体的定义中，有一处细节：我们使用了自身拥有所有权的 String 类型而不是基于引用的 &amp;str 字符串切片类型。这是一个有意而为之的选择：因为我们想要这个结构体拥有它所有的数据，而不是从其它地方借用数据。</p>
+<p>你也可以让 User 结构体从其它对象借用数据，不过这么做，就需要引入生命周期(lifetimes)这个新概念（也是一个复杂的概念），简而言之，生命周期能确保结构体的作用范围要比它所借用的数据的作用范围要小。</p>
+<p>总之，如果你想在结构体中使用一个引用，就必须加上生命周期，否则就会报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">struct User &#123;</span><br><span class="line">    username: &amp;str,</span><br><span class="line">    email: &amp;str,</span><br><span class="line">    sign_in_count: u64,</span><br><span class="line">    active: bool,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let user1 = User &#123;</span><br><span class="line">        email: &quot;someone@example.com&quot;,</span><br><span class="line">        username: &quot;someusername123&quot;,</span><br><span class="line">        active: true,</span><br><span class="line">        sign_in_count: 1,</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译器会抱怨它需要生命周期标识符：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">error[E0106]: missing lifetime specifier</span><br><span class="line"> --&gt; src/main.rs:2:15</span><br><span class="line">  |</span><br><span class="line">2 |     username: &amp;str,</span><br><span class="line">  |               ^ expected named lifetime parameter // 需要一个生命周期</span><br><span class="line">  |</span><br><span class="line">help: consider introducing a named lifetime parameter // 考虑像下面的代码这样引入一个生命周期</span><br><span class="line">  |</span><br><span class="line">1 ~ struct User&lt;&#x27;a&gt; &#123;</span><br><span class="line">2 ~     username: &amp;&#x27;a str,</span><br><span class="line">  |</span><br><span class="line"></span><br><span class="line">error[E0106]: missing lifetime specifier</span><br><span class="line"> --&gt; src/main.rs:3:12</span><br><span class="line">  |</span><br><span class="line">3 |     email: &amp;str,</span><br><span class="line">  |            ^ expected named lifetime parameter</span><br><span class="line">  |</span><br><span class="line">help: consider introducing a named lifetime parameter</span><br><span class="line">  |</span><br><span class="line">1 ~ struct User&lt;&#x27;a&gt; &#123;</span><br><span class="line">2 |     username: &amp;str,</span><br><span class="line">3 ~     email: &amp;&#x27;a str,</span><br><span class="line">  |</span><br></pre></td></tr></table></figure>
+<p>未来在生命周期中会讲到如何修复这个问题以便在结构体中存储引用，不过在那之前，我们会避免在结构体中使用引用类型。</p>
+<h1 id="11-使用-derive-Debug-来打印结构体的信息"><a href="#11-使用-derive-Debug-来打印结构体的信息" class="headerlink" title="11 使用 #[derive(Debug)] 来打印结构体的信息"></a>11 使用 #[derive(Debug)] 来打印结构体的信息</h1><p>在前面的代码中我们使用 #[derive(Debug)] 对结构体进行了标记，这样才能使用 println!(“{:?}”, s); 的方式对其进行打印输出，如果不加，看看会发生什么:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">struct Rectangle &#123;</span><br><span class="line">    width: u32,</span><br><span class="line">    height: u32,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let rect1 = Rectangle &#123;</span><br><span class="line">        width: 30,</span><br><span class="line">        height: 50,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    println!(&quot;rect1 is &#123;&#125;&quot;, rect1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先可以观察到，上面使用了 {} 而不是之前的 {:?}，运行后报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error[E0277]: `Rectangle` doesn&#x27;t implement `std::fmt::Display`</span><br></pre></td></tr></table></figure>
+<p>提示我们结构体 Rectangle 没有实现 Display 特征，这是因为如果我们使用 {} 来格式化输出，那对应的类型就必须实现 Display 特征，以前学习的基本类型，都默认实现了该特征:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let v = 1;</span><br><span class="line">    let b = true;</span><br><span class="line"></span><br><span class="line">    println!(&quot;&#123;&#125;, &#123;&#125;&quot;, v, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码不会报错，那么结构体为什么不默认实现 Display 特征呢？原因在于结构体较为复杂，例如考虑以下问题：你想要逗号对字段进行分割吗？需要括号吗？加在什么地方？所有的字段都应该显示？类似的还有很多，由于这种复杂性，Rust 不希望猜测我们想要的是什么，而是把选择权交给我们自己来实现：如果要用 {} 的方式打印结构体，那就自己实现 Display 特征。</p>
+<p>接下来继续阅读报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">= help: the trait `std::fmt::Display` is not implemented for `Rectangle`</span><br><span class="line">= note: in format strings you may be able to use `&#123;:?&#125;` (or &#123;:#?&#125; for pretty-print) instead</span><br></pre></td></tr></table></figure>
+<p>上面提示我们使用 {:?} 来试试，这个方式我们在本文的前面也见过，下面来试试:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">println!(&quot;rect1 is &#123;:?&#125;&quot;, rect1);</span><br></pre></td></tr></table></figure>
+<p>可是依然无情报错了:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error[E0277]: `Rectangle` doesn&#x27;t implement `Debug`</span><br></pre></td></tr></table></figure>
+<p>好在，聪明的编译器又一次给出了提示:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">= help: the trait `Debug` is not implemented for `Rectangle`</span><br><span class="line">= note: add `#[derive(Debug)]` to `Rectangle` or manually `impl Debug for Rectangle`</span><br></pre></td></tr></table></figure>
+<p>让我们实现 Debug 特征，Oh No，就是不想实现 Display 特征，才用的 {:?}，怎么又要实现 Debug，但是仔细看，提示中有一行： add #[derive(Debug)] to Rectangle， 哦？这不就是我们前文一直在使用的吗？</p>
+<p>首先，Rust 默认不会为我们实现 Debug，为了实现，有两种方式可以选择：</p>
+<ul>
+<li>手动实现</li>
+<li>使用 derive 派生实现</li>
+</ul>
+<p>后者简单的多，但是也有限制，具体见附录 D，这里我们就不再深入讲解，来看看该如何使用:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#[derive(Debug)]</span><br><span class="line">struct Rectangle &#123;</span><br><span class="line">    width: u32,</span><br><span class="line">    height: u32,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let rect1 = Rectangle &#123;</span><br><span class="line">        width: 30,</span><br><span class="line">        height: 50,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    println!(&quot;rect1 is &#123;:?&#125;&quot;, rect1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时运行程序，就不再有错误，输出如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cargo run</span><br><span class="line">rect1 is Rectangle &#123; width: 30, height: 50 &#125;</span><br></pre></td></tr></table></figure>
+<p>这个输出格式看上去也不赖嘛，虽然未必是最好的。这种格式是 Rust 自动为我们提供的实现，看上基本就跟结构体的定义形式一样。</p>
+<p>当结构体较大时，我们可能希望能够有更好的输出表现，此时可以使用 {:#?} 来替代 {:?}，输出如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rect1 is Rectangle &#123;</span><br><span class="line">    width: 30,</span><br><span class="line">    height: 50,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时结构体的输出跟我们创建时候的代码几乎一模一样了</p>
+<p>还有一个简单的输出 debug 信息的方法，那就是使用 dbg! 宏，它会拿走表达式的所有权，然后打印出相应的文件名、行号等 debug 信息，当然还有我们需要的表达式的求值结果。除此之外，它最终还会把表达式值的所有权返回！</p>
+<table>
+    <td bgcolor=#F0F8FF>
+        dbg! 输出到标准错误输出 stderr，而 println! 输出到标准输出 stdout。
+    </td>
+</table>
+
+<p>下面的例子中清晰的展示了 dbg! 如何在打印出信息的同时，还把表达式的值赋给了 width:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#[derive(Debug)]</span><br><span class="line">struct Rectangle &#123;</span><br><span class="line">    width: u32,</span><br><span class="line">    height: u32,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let scale = 2;</span><br><span class="line">    let rect1 = Rectangle &#123;</span><br><span class="line">        width: dbg!(30 * scale),</span><br><span class="line">        height: 50,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    dbg!(&amp;rect1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终的 debug 输出如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ cargo run</span><br><span class="line">[src/main.rs:10] 30 * scale = 60</span><br><span class="line">[src/main.rs:14] &amp;rect1 = Rectangle &#123;</span><br><span class="line">    width: 60,</span><br><span class="line">    height: 50,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，我们想要的 debug 信息几乎都有了：代码所在的文件名、行号、表达式以及表达式的值，简直完美！</p>
+<h1 id="12-方法"><a href="#12-方法" class="headerlink" title="12 方法"></a>12 方法</h1><h2 id="12-1-定义方法"><a href="#12-1-定义方法" class="headerlink" title="12.1 定义方法"></a>12.1 定义方法</h2><p>Rust 使用 impl 来定义方法，例如以下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">struct Circle &#123;</span><br><span class="line">    x: f64,</span><br><span class="line">    y: f64,</span><br><span class="line">    radius: f64,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl Circle &#123;</span><br><span class="line">    // new是Circle的关联函数，因为它的第一个参数不是self，且new并不是关键字</span><br><span class="line">    // 这种方法往往用于初始化当前结构体的实例</span><br><span class="line">    fn new(x: f64, y: f64, radius: f64) -&gt; Circle &#123;</span><br><span class="line">        Circle &#123;</span><br><span class="line">            x: x,</span><br><span class="line">            y: y,</span><br><span class="line">            radius: radius,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Circle的方法，&amp;self表示借用当前的Circle结构体</span><br><span class="line">    fn area(&amp;self) -&gt; f64 &#123;</span><br><span class="line">        std::f64::consts::PI * (self.radius * self.radius)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们这里先不详细展开讲解，只是先建立对方法定义的大致印象。下面的图片将 Rust 方法定义与其它语言的方法定义做了对比：<br><img src="/../images/method-mem.png"><br>可以看出，其它语言中所有定义都在 class 中，但是 Rust 的对象定义和方法定义是分离的，这种数据和使用分离的方式，会给予使用者极高的灵活度。</p>
+<p>再来看一个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#[derive(Debug)]</span><br><span class="line">struct Rectangle &#123;</span><br><span class="line">    width: u32,</span><br><span class="line">    height: u32,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl Rectangle &#123;</span><br><span class="line">    fn area(&amp;self) -&gt; u32 &#123;</span><br><span class="line">        self.width * self.height</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let rect1 = Rectangle &#123; width: 30, height: 50 &#125;;</span><br><span class="line"></span><br><span class="line">    println!(</span><br><span class="line">        &quot;The area of the rectangle is &#123;&#125; square pixels.&quot;,</span><br><span class="line">        rect1.area()</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该例子定义了一个 Rectangle 结构体，并且在其上定义了一个 area 方法，用于计算该矩形的面积。</p>
+<p>impl Rectangle {} 表示为 Rectangle 实现方法(impl 是实现 implementation 的缩写)，这样的写法表明 impl 语句块中的一切都是跟 Rectangle 相关联的。</p>
+<h1 id="12-2-self、-self-和-mut-self"><a href="#12-2-self、-self-和-mut-self" class="headerlink" title="12.2 self、&amp;self 和 &amp;mut self"></a>12.2 self、&amp;self 和 &amp;mut self</h1><p>接下来的内容非常重要，请大家仔细看。在 area 的签名中，我们使用 &amp;self 替代 rectangle: &amp;Rectangle，&amp;self 其实是 self: &amp;Self 的简写（注意大小写）。在一个 impl 块内，Self 指代被实现方法的结构体类型，self 指代此类型的实例，换句话说，self 指代的是 Rectangle 结构体实例，这样的写法会让我们的代码简洁很多，而且非常便于理解：我们为哪个结构体实现方法，那么 self 就是指代哪个结构体的实例。</p>
+<p>需要注意的是，self 依然有所有权的概念：</p>
+<ul>
+<li>self 表示 Rectangle 的所有权转移到该方法中，这种形式用的较少</li>
+<li>&amp;self 表示该方法对 Rectangle 的不可变借用</li>
+<li>&amp;mut self 表示可变借用<br>总之，self 的使用就跟函数参数一样，要严格遵守 Rust 的所有权规则。</li>
+</ul>
+<p>回到上面的例子中，选择 &amp;self 的理由跟在函数中使用 &amp;Rectangle 是相同的：我们并不想获取所有权，也无需去改变它，只是希望能够读取结构体中的数据。如果想要在方法中去改变当前的结构体，需要将第一个参数改为 &amp;mut self。仅仅通过使用 self 作为第一个参数来使方法获取实例的所有权是很少见的，这种使用方式往往用于把当前的对象转成另外一个对象时使用，转换完后，就不再关注之前的对象，且可以防止对之前对象的误调用。</p>
+<p>简单总结下，使用方法代替函数有以下好处：</p>
+<ul>
+<li>不用在函数签名中重复书写 self 对应的类型</li>
+<li>代码的组织性和内聚性更强，对于代码维护和阅读来说，好处巨大</li>
+</ul>
+<h1 id="12-3-方法名跟结构体字段名相同"><a href="#12-3-方法名跟结构体字段名相同" class="headerlink" title="12.3 方法名跟结构体字段名相同"></a>12.3 方法名跟结构体字段名相同</h1><p>在 Rust 中，允许方法名跟结构体的字段名相同：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">impl Rectangle &#123;</span><br><span class="line">    fn width(&amp;self) -&gt; bool &#123;</span><br><span class="line">        self.width &gt; 0</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let rect1 = Rectangle &#123;</span><br><span class="line">        width: 30,</span><br><span class="line">        height: 50,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    if rect1.width() &#123;</span><br><span class="line">        println!(&quot;The rectangle has a nonzero width; it is &#123;&#125;&quot;, rect1.width);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当我们使用 rect1.width() 时，Rust 知道我们调用的是它的方法，如果使用 rect1.width，则是访问它的字段。</p>
+<p>一般来说，方法跟字段同名，往往适用于实现 getter 访问器，例如:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">pub struct Rectangle &#123;</span><br><span class="line">    width: u32,</span><br><span class="line">    height: u32,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl Rectangle &#123;</span><br><span class="line">    pub fn new(width: u32, height: u32) -&gt; Self &#123;</span><br><span class="line">        Rectangle &#123; width, height &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    pub fn width(&amp;self) -&gt; u32 &#123;</span><br><span class="line">        return self.width;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let rect1 = Rectangle::new(30, 50);</span><br><span class="line"></span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, rect1.width());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用这种方式，我们可以把 Rectangle 的字段设置为私有属性，只需把它的 new 和 width 方法设置为公开可见，那么用户就可以创建一个矩形，同时通过访问器 rect1.width() 方法来获取矩形的宽度，因为 width 字段是私有的，当用户访问 rect1.width 字段时，就会报错。注意在此例中，Self 指代的就是被实现方法的结构体 Rectangle。</p>
+<table>
+    <td bgcolor=#F0F8FF>
+        -> 运算符到哪去了？
+        在 C/C++ 语言中，有两个不同的运算符来调用方法：. 直接在对象上调用方法，而 -> 在一个对象的指针上调用方法，这时需要先解引用指针。换句话说，如果 object 是一个指针，那么 object->something() 和 (*object).something() 是一样的。
+
+<pre><code>    Rust 并没有一个与 -&gt; 等效的运算符；相反，Rust 有一个叫 自动引用和解引用的功能。方法调用是 Rust 中少数几个拥有这种行为的地方。
+
+    他是这样工作的：当使用 object.something() 调用方法时，Rust 会自动为 object 添加 &amp;、&amp;mut 或 * 以便使 object 与方法签名匹配。也就是说，这些代码是等价的：
+
+    p1.distance(&amp;p2);
+    (&amp;p1).distance(&amp;p2);
+    第一行看起来简洁的多。这种自动引用的行为之所以有效，是因为方法有一个明确的接收者———— self 的类型。在给出接收者和方法名的前提下，Rust 可以明确地计算出方法是仅仅读取（&amp;self），做出修改（&amp;mut self）或者是获取所有权（self）。事实上，Rust 对方法接收者的隐式借用让所有权在实践中更友好。
+&lt;/td&gt;
+</code></pre>
+</table>
+
+<h1 id="12-4-带有多个参数的方法"><a href="#12-4-带有多个参数的方法" class="headerlink" title="12.4 带有多个参数的方法"></a>12.4 带有多个参数的方法</h1><p>方法和函数一样，可以使用多个参数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">impl Rectangle &#123;</span><br><span class="line">    fn area(&amp;self) -&gt; u32 &#123;</span><br><span class="line">        self.width * self.height</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool &#123;</span><br><span class="line">        self.width &gt; other.width &amp;&amp; self.height &gt; other.height</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let rect1 = Rectangle &#123; width: 30, height: 50 &#125;;</span><br><span class="line">    let rect2 = Rectangle &#123; width: 10, height: 40 &#125;;</span><br><span class="line">    let rect3 = Rectangle &#123; width: 60, height: 45 &#125;;</span><br><span class="line"></span><br><span class="line">    println!(&quot;Can rect1 hold rect2? &#123;&#125;&quot;, rect1.can_hold(&amp;rect2));</span><br><span class="line">    println!(&quot;Can rect1 hold rect3? &#123;&#125;&quot;, rect1.can_hold(&amp;rect3));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="12-5-关联函数"><a href="#12-5-关联函数" class="headerlink" title="12.5 关联函数"></a>12.5 关联函数</h1><p>现在大家可以思考一个问题，如何为一个结构体定义一个构造器方法？也就是接受几个参数，然后构造并返回该结构体的实例。其实答案在开头的代码片段中就给出了，很简单，参数中不包含 self 即可。</p>
+<p>这种定义在 impl 中且没有 self 的函数被称之为关联函数： 因为它没有 self，不能用 f.read() 的形式调用，因此它是一个函数而不是方法，它又在 impl 中，与结构体紧密关联，因此称为关联函数。</p>
+<p>在之前的代码中，我们已经多次使用过关联函数，例如 String::from，用于创建一个动态字符串。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">impl Rectangle &#123;</span><br><span class="line">    fn new(w: u32, h: u32) -&gt; Rectangle &#123;</span><br><span class="line">        Rectangle &#123; width: w, height: h &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<table>
+    <td bgcolor=#F0F8FF>
+        Rust 中有一个约定俗成的规则，使用 new 来作为构造器的名称，出于设计上的考虑，Rust 特地没有用 new 作为关键字。
+    </td>
+</table>
+因为是函数，所以不能用 . 的方式来调用，我们需要用 :: 来调用，例如 let sq = Rectangle::new(3, 3);。这个方法位于结构体的命名空间中：:: 语法用于关联函数和模块创建的命名空间。
+
+<h1 id="12-6-多个-impl-定义"><a href="#12-6-多个-impl-定义" class="headerlink" title="12.6 多个 impl 定义"></a>12.6 多个 impl 定义</h1><p>Rust 允许我们为一个结构体定义多个 impl 块，目的是提供更多的灵活性和代码组织性，例如当方法多了后，可以把相关的方法组织在同一个 impl 块中，那么就可以形成多个 impl 块，各自完成一块儿目标：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">impl Rectangle &#123;</span><br><span class="line">    fn area(&amp;self) -&gt; u32 &#123;</span><br><span class="line">        self.width * self.height</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl Rectangle &#123;</span><br><span class="line">    fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool &#123;</span><br><span class="line">        self.width &gt; other.width &amp;&amp; self.height &gt; other.height</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，就这个例子而言，我们没必要使用两个 impl 块，这里只是为了演示方便。</p>
+<h1 id="12-7-为枚举实现方法"><a href="#12-7-为枚举实现方法" class="headerlink" title="12.7 为枚举实现方法"></a>12.7 为枚举实现方法</h1><p>枚举类型之所以强大，不仅仅在于它好用、可以同一化类型，还在于，我们可以像结构体一样，为枚举实现方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#![allow(unused)]</span><br><span class="line">enum Message &#123;</span><br><span class="line">    Quit,</span><br><span class="line">    Move &#123; x: i32, y: i32 &#125;,</span><br><span class="line">    Write(String),</span><br><span class="line">    ChangeColor(i32, i32, i32),</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl Message &#123;</span><br><span class="line">    fn call(&amp;self) &#123;</span><br><span class="line">        // 在这里定义方法体</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let m = Message::Write(String::from(&quot;hello&quot;));</span><br><span class="line">    m.call();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/06/learnRust11/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2425,174 +2711,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/13/learnRust3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Byte的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2024/08/13/learnRust3/" itemprop="url">Rust入门-基础 第三节 Rust - 函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-08-13T23:49:28+08:00">
-                2024-08-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="函数组成"><a href="#函数组成" class="headerlink" title="函数组成"></a>函数组成</h1><ul>
-<li>声朗函数的关键字 fn</li>
-<li>函数名 add()</li>
-<li>参数i和j和参数类型 i32</li>
-<li>返同值类型 i32</li>
-<li>函数体i+j</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fn add(i:i32,j:i32)-&gt; i32 &#123;</span><br><span class="line">    i + j</span><br><span class="line">&#125;</span><br><span class="line">fn main()&#123;</span><br><span class="line">    let a = 1;</span><br><span class="line">    let b = 2;</span><br><span class="line">    let c = add(2, b);</span><br><span class="line">    printin!(&quot;&#123;&#125;&quot;,c);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>该函数如此简单，但是又是如此的五脏俱全，声明函数的关键字 fn ,函数名 add()，参数 i 和 j，参数类型和返回值类型都是 i32，总之一切那么的普通，但是又那么的自信，直到你看到了下面这张图：<br><img src="/../images/function.png"><br>当你看懂了这张图，其实就等于差不多完成了函数章节的学习，但是这么短的章节显然对不起读者老爷们的厚爱，所以我们来展开下。</p>
-<h1 id="函数要点"><a href="#函数要点" class="headerlink" title="函数要点"></a>函数要点</h1><ul>
-<li>开头是字符，后面是数字，下划线，字母</li>
-<li>开头是下划线，后面是数字，下划线，字母，不能仅有下划线</li>
-<li>通数名和变量名使用蛇形命名法(snakecase)，例如fn add_two() &#x3D;&gt; {}</li>
-</ul>
-<h1 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h1><p>Rust 是强类型语言，因此需要你为每一个的数参数都标识出它的具体类型<br>注意:是每一个⚠️</p>
-<h1 id="函数返回"><a href="#函数返回" class="headerlink" title="函数返回"></a>函数返回</h1><p>函数的返日值裁是函数体最后一条表达式的返回值，也可以使用return 提前返回想要完全理解这句话需要掌握**语句(statement)和表达式(expression)””的概念初学者裁记住函数的两种形态就行了</p>
-<ul>
-<li>return + 分号</li>
-<li>没有return + 没有分号</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn add(i:i32, j:i32)-&gt; i32 &#123;</span><br><span class="line">    i + j</span><br><span class="line">&#125;</span><br><span class="line">fn add(i:i32, j:i32)-&gt; i32 &#123;</span><br><span class="line">    return i + j;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="Rust-中的特殊返回类型"><a href="#Rust-中的特殊返回类型" class="headerlink" title="Rust 中的特殊返回类型"></a>Rust 中的特殊返回类型</h1><h2 id="无返回值"><a href="#无返回值" class="headerlink" title="无返回值()"></a>无返回值()</h2><p>如果一个的数没有返回值，那么就返回()</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn print(i: i32)&#123;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, i);</span><br><span class="line">&#125;</span><br><span class="line">fn print(i:i32) -&gt;() &#123;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>对于 Rust 新手来说，有些返回类型很难理解，而且如果你想通过百度或者谷歌去搜索，都不好查询，因为这些符号太常见了，根本难以精确搜索到。</p>
-<p>例如单元类型 ()，是一个零长度的元组。它没啥作用，但是可以用来表达一个函数没有返回值：</p>
-<p>函数没有返回值，那么返回一个 ()<br>通过 ; 结尾的语句返回一个 ()<br>例如下面的 report 函数会隐式返回一个 ()：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use std::fmt::Debug;</span><br><span class="line"></span><br><span class="line">fn report&lt;T: Debug&gt;(item: T) &#123;</span><br><span class="line">  println!(&quot;&#123;:?&#125;&quot;, item);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>与上面的函数返回值相同，但是下面的函数显式的返回了 ()：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn clear(text: &amp;mut String) -&gt; () &#123;</span><br><span class="line">  *text = String::from(&quot;&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在实际编程中，你会经常在错误提示中看到该 () 的身影出没，假如你的函数需要返回一个 u32 值，但是如果你不幸的以 表达式; 的语句形式作为函数的最后一行代码，就会报错：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn add(x:u32,y:u32) -&gt; u32 &#123;</span><br><span class="line">    x + y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>错误如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">error[E0308]: mismatched types // 类型不匹配</span><br><span class="line"> --&gt; src/main.rs:6:24</span><br><span class="line">  |</span><br><span class="line">6 | fn add(x:u32,y:u32) -&gt; u32 &#123;</span><br><span class="line">  |    ---                 ^^^ expected `u32`, found `()` // 期望返回u32,却返回()</span><br><span class="line">  |    |</span><br><span class="line">  |    implicitly returns `()` as its body has no tail or `return` expression</span><br><span class="line">7 |     x + y;</span><br><span class="line">  |          - help: consider removing this semicolon</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>还记得我们在语句与表达式中讲过的吗？只有表达式能返回值，而 ; 结尾的是语句，在 Rust 中，一定要严格区分表达式和语句的区别，这个在其它语言中往往是被忽视的点。</p>
-<h1 id="永不返回的发散函数"><a href="#永不返回的发散函数" class="headerlink" title="永不返回的发散函数 !"></a>永不返回的发散函数 !</h1><p>当用 ! 作函数返回类型的时候，表示该函数永不返回( diverge function )，特别的，这种语法往往用做会导致程序崩溃的函数：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn dead_end() -&gt; ! &#123;</span><br><span class="line">  panic!(&quot;你已经到了穷途末路，崩溃吧！&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>下面的函数创建了一个无限循环，该循环永不跳出，因此函数也永不返回：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fn forever() -&gt; ! &#123;</span><br><span class="line">  loop &#123;</span><br><span class="line">    //...</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="练习题"><a href="#练习题" class="headerlink" title="练习题"></a>练习题</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    // 不要修改下面两行代码!</span><br><span class="line">    let (x, y) = (1, 2);</span><br><span class="line">    let s = sum(x, y);</span><br><span class="line">    print(s);</span><br><span class="line">    assert_eq!(s, 3);</span><br><span class="line">&#125;</span><br><span class="line">fn print(i: i32)&#123;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, i);</span><br><span class="line">&#125;</span><br><span class="line">fn sum(x:i32, y: i32) -&gt; i32 &#123;</span><br><span class="line">    return x + y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    print();</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> // 使用另一个类型来替代 i32</span><br><span class="line"> fn print() -&gt; () &#123;</span><br><span class="line">    println!(&quot;hello,world&quot;);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    never_return();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn never_return() -&gt; ! &#123;</span><br><span class="line">    // 实现这个函数，不要修改函数签名!</span><br><span class="line">    // panic!(&quot;error&quot;);</span><br><span class="line">    loop &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    get_option(1);</span><br><span class="line">    println!(&quot;Success!&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fn get_option(tp: u8) -&gt; Option&lt;i32&gt; &#123;</span><br><span class="line">    match tp &#123;</span><br><span class="line">        1 =&gt; &#123;</span><br><span class="line">            // TODO</span><br><span class="line">        &#125;</span><br><span class="line">        _ =&gt; &#123;</span><br><span class="line">            // TODO</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    // 这里与其返回一个 None，不如使用发散函数替代</span><br><span class="line">    never_return_fn()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 使用三种方法实现以下发散函数</span><br><span class="line">fn never_return_fn() -&gt; ! &#123;</span><br><span class="line">    // panic!(&quot;error&quot;);</span><br><span class="line">    //todo!()</span><br><span class="line">    loop &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    // 填空</span><br><span class="line">    let b: bool = false;</span><br><span class="line"></span><br><span class="line">    let _v: i32 = match b &#123;</span><br><span class="line">        true =&gt; 1,</span><br><span class="line">        // 发散函数也可以用于 `match` 表达式，用于替代任何类型的值</span><br><span class="line">        false =&gt; &#123;</span><br><span class="line">            println!(&quot;Success!&quot;);</span><br><span class="line">            panic!(&quot;we have no value for `false`, but we can panic&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    println!(&quot;Exercise Failed if printing out this line!&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2643,7 +2761,7 @@
               
                 <a href="/archives%7C%7C%20archive">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
